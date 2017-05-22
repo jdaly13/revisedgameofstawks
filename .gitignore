@@ -219,7 +219,7 @@ node_modules/
 CardStackEffects/
 bower_components/
 
-config/auth.js
+configuration/configauth.js
 
 # Optional npm cache directory
 .npm

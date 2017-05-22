@@ -58,15 +58,17 @@ class LoginPage extends React.Component {
 
         // change the component-container state
         this.setState({
-          errors: {}
+          errors: {},
+					data: xhr.response.data.local
         });
 
         // save the token
         Auth.authenticateUser(xhr.response.token);
 
-
+				console.log(xhr.response.data.local);
         // change the current URL to /
         this.context.router.replace('/');
+				console.log(this.context);
       } else {
         // failure
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Auth from '../modules/Auth';
-import Dashboard from '../components/Dashboard.js';
+import Profile from '../components/Dashboard.js';
 
 
 class DashboardPage extends React.Component {
@@ -8,11 +8,12 @@ class DashboardPage extends React.Component {
   /**
    * Class constructor.
    */
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
-      secretData: ''
+      secretData: '',
+			data: ''
     };
   }
 
@@ -27,10 +28,13 @@ class DashboardPage extends React.Component {
     xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
     xhr.responseType = 'json';
     xhr.addEventListener('load', () => {
+			console.log(xhr.response.data);
       if (xhr.status === 200) {
         this.setState({
-          secretData: xhr.response.message
+          secretData: xhr.response.message,
+					data: xhr.response.data
         });
+				console.log(this.state.data);
       }
     });
     xhr.send();
@@ -40,7 +44,11 @@ class DashboardPage extends React.Component {
    * Render the component.
    */
   render() {
-    return (<Dashboard secretData={this.state.secretData} />);
+		if (this.state.data) {
+    	return (<Profile secretData={this.state.secretData} data={this.state.data} />);
+		} else {
+			return (<div>Loading ... </div>)					
+		}
   }
 
 }

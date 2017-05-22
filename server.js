@@ -1,7 +1,3 @@
-// server.js
-
-// set up ======================================================================
-// get all the tools we need
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT || 3099;
@@ -28,21 +24,20 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 
 //passport
-require('./configuration/passport')(passport, jwt)
-//var localLoginStrategy = require('./server/passport/local-login');
-//passport.use('local-signup', localSignupStrategy);
-//passport.use('local-login', localLoginStrategy);
+require('./configuration/passport')(passport, jwt);
 
 // pass the authenticaion checker middleware
 var authCheckMiddleware = require('./configuration/auth-check');
 app.use('/api', authCheckMiddleware);
 
 //app.set('view engine', 'html'); // set up ejs for templating
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 //routes
-var authRoutes = require('./app/auth.js');
+var authRoutes = require('./app/auth');
+var apiRoutes = require('./app/api');
 app.use('/auth', authRoutes);
+app.use('/api', apiRoutes);
 require('./app/routes.js')(app, jwt, crypto, asyncx, nodemailer, express);
 
 

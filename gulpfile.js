@@ -1,6 +1,7 @@
+'use strict';
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
-var sourcemaps = require('gulp-sourcemaps');
+//var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
@@ -27,12 +28,6 @@ function bundle(b) {
 }
 
 gulp.task('watchify', () => {
-  /*let b = watchify(browserify({
-    cache: {},
-    packageCache: {},
-    entries: browserifyOpts.entries
-  }));
-  */
   let b = watchify(browserify('./public/js/scripts.js', { debug: true }).transform(babel));
 
   b.on('update', () => {

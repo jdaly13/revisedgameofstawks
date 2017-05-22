@@ -9,6 +9,7 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
+				userName		 : String,
         resetPasswordToken: String,
         resetPasswordExpires: Date,
         startAmount: Number,
@@ -54,7 +55,6 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.getBalance = function() {
-    console.log(this);
      return this.startAmount - (this.total || 0);
 };
 
