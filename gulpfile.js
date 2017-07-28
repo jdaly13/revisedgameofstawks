@@ -1,7 +1,6 @@
 'use strict';
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
-//var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
@@ -47,9 +46,10 @@ gulp.task('browserSync', ['nodemon'], () => {
     browser: ['google chrome'],
     proxy: 'http://localhost:3099',
     port: 7000,
-    online: true,
-    open: 'local',
-    reloadDelay: 3000
+    open: false,
+    notify: false,
+    logConnections: false,
+    reloadDelay: 1000
   });
 });
 
@@ -88,6 +88,5 @@ gulp.task('sass', function() {
     }));
 });
 
-//gulp.task('start', ['watch', 'browserSync']);
 gulp.watch('./public/scss/**/*.scss', ['sass']);
-gulp.task('start', ['watchify', 'browserSync'], browserSync.reload);
+gulp.task('start', ['watchify', 'browserSync']);

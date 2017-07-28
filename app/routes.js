@@ -1,4 +1,5 @@
 // app/routes.js
+'use strict';
 var User = require('../app/models/user');
 var auth = require('../configuration/configauth').sendGrid;
 var path = require('path');

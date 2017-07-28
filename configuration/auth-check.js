@@ -1,3 +1,4 @@
+'use strict';
 var jwt = require('jsonwebtoken');
 var User =    require('../app/models/user');
 var config = require('./configauth');
@@ -26,7 +27,7 @@ module.exports = (req, res, next) => {
       if (userErr || !user) {
         return res.status(401).end();
       }
-			res.data = user.local
+			res.data = user.local;
       return next();
     });
   });

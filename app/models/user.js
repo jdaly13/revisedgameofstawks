@@ -1,5 +1,6 @@
 // app/models/user.js
 // load the things we need
+'use strict';
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
@@ -9,7 +10,7 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
-				userName		 : String,
+	    userName	 : String,
         resetPasswordToken: String,
         resetPasswordExpires: Date,
         startAmount: Number,

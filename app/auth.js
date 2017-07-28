@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const validator = require('validator');
 const passport = require('passport');
@@ -126,7 +127,7 @@ router.post('/login', (req, res, next) => {
 
   return passport.authenticate('local-login', (err, token, userData) => {
     if (err) {
-			console.log(err)
+			console.log(err);
       if (err.message === 'invalid username or password') {
         return res.status(400).json({
           success: false,
