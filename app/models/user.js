@@ -10,7 +10,7 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
-	    userName	 : String,
+	      userName	 : String,
         resetPasswordToken: String,
         resetPasswordExpires: Date,
         startAmount: Number,

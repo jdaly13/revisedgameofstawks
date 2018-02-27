@@ -67,8 +67,9 @@ class LoginPage extends React.Component {
 
 				console.log(xhr.response.data.local);
         // change the current URL to /
+        console.log(this.context, 'context');
         this.context.router.replace('/');
-				console.log(this.context);
+
       } else {
         // failure
 

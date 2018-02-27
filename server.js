@@ -1,45 +1,36 @@
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 3099;
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 3099;
 var mongoose = require('mongoose');
-var bodyParser   = require('body-parser');
-//var bcrypt       = require('bcrypt-nodejs');
-var nodemailer = require('nodemailer');
-var jwt = require('jsonwebtoken');
-var passport = require('passport');
-
-var asyncx       = require('async');
-var crypto       = require('crypto');
+var bodyParser = require('body-parser');
 
 var configDBurl = require('./configuration/database.js').url;
-//var config = require('./configuration/auth.js');
+const mongoooseOptions = {
+  useMongoClient: true,
+  socketTimeoutMS: 0,
+  keepAlive: true,
+  reconnectTries: 30
+};
 
 // configuration ===============================================================
-mongoose.connect(configDBurl); // connect to our database
-//app.set('superSecret', config.secret); // secret variable
+mongoose.connect(configDBurl, mongoooseOptions);
 
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(passport.initialize());
 
-//passport
-require('./configuration/passport')(passport, jwt);
-
-// pass the authenticaion checker middleware
-var authCheckMiddleware = require('./configuration/auth-check');
-app.use('/api', authCheckMiddleware);
-
-//app.set('view engine', 'html'); // set up ejs for templating
 app.use(express.static('public'));
 
-//routes
-var authRoutes = require('./app/auth');
-var apiRoutes = require('./app/api');
-app.use('/auth', authRoutes);
-app.use('/api', apiRoutes);
-require('./app/routes.js')(app, jwt, crypto, asyncx, nodemailer, express);
+//to use API to fetch user data
+var authCheckMiddleware = require('./configuration/auth-check');
+const apiRoutes = require('./app/api')(express);
+app.use('/api', authCheckMiddleware, apiRoutes);
 
+//auth for login and signup
+var authRoutes = require('./app/auth')(express);
+app.use('/auth', authRoutes);
+
+require('./app/routes.js')(app); // crypto, asyncx, nodemailer, express
 
 // launch ======================================================================
 app.listen(port);

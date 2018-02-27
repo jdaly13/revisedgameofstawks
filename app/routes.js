@@ -1,15 +1,23 @@
 // app/routes.js
-'use strict';
-var User = require('../app/models/user');
-var auth = require('../configuration/configauth').sendGrid;
-var path = require('path');
-var sellCommission = 10; // put this in separate file
+//'use strict';
+//var User = require('../app/models/user');
+//var auth = require('../configuration/configauth').sendGrid;
+//var path = require('path');
+//var sellCommission = 10; // put this in separate file
+const path = require('path');
+module.exports = function(app) {
+  app.get('*', function(req, res, next) {
+    res.sendFile(path.resolve('./public/index.html'));
+    //res.sendFile(path.join(__dirname, '../public', 'index.html'));
+  });
+};
+/*
 module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
 
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
-    app.get('/', redirectToProfile, function(req, res, next) {
+    app.get('/', function(req, res, next) {
 			res.sendFile(path.join(__dirname, '../public', 'index.html'));
     });
 
@@ -17,7 +25,7 @@ module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
     // LOGIN ===============================
     // =====================================
     // show the login form
-    app.get('/login', redirectToProfile,  function(req, res) {
+    app.get('/login',  function(req, res) {
       res.sendFile(path.join(__dirname, '../public', 'index.html'));
     });
 
@@ -49,7 +57,7 @@ module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', function(req, res) {
         res.render('profile.ejs', {
             user : req.user // get the user out of session and pass to template
         });
@@ -59,7 +67,7 @@ module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
-        req.logout();
+      //  req.logout();
         res.redirect('/');
     });
 
@@ -295,22 +303,4 @@ module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
 
 
 };
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}
-
-function redirectToProfile (req, res, next) {
-    if (!req.isAuthenticated) {
-        return next();
-    } else {
-        res.redirect('/profile');
-    }
-}
+*/
