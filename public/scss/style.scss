@@ -43,7 +43,7 @@ a:hover {
 }
 
 .container {
-  margin: 0 auto;
+  margin: 0 auto 1.5rem;
   text-align: center;
   width: 700px;
 }
@@ -52,7 +52,8 @@ a:hover {
   padding: 16px;
 }
 
-.field-line, .button-line {
+.field-line,
+.button-line {
   padding: 16px;
 }
 
@@ -64,4 +65,24 @@ a:hover {
 .success-message {
   padding: 0 16px;
   color: green;
+}
+
+span {
+  display: block;
+  padding: 0.25rem;
+}
+
+.content {
+  margin: 1rem;
+}
+
+.submit {
+  width: 150px;
+  height: 50px;
+  border-radius: 7px;
+  border: 1px solid gray;
+  background: #ccc;
+  color: black;
+  text-transform: uppercase;
+  font-size: 1rem;
 }

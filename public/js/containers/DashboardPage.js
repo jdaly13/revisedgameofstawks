@@ -1,6 +1,7 @@
 import React from 'react';
 import Auth from '../modules/Auth';
 import UserProfile from '../components/Dashboard.js';
+import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 
 var utilityFunctions = (function() {
   return {
@@ -50,6 +51,9 @@ class DashboardPage extends React.Component {
 
   getCurrentPrices() {
     let x = [];
+    var currentPortfolioCopy = this.state.currentPortfolio.map(val =>
+      Object.assign({}, val)
+    );
     this.state.currentPortfolio.forEach(obj => {
       var symbol = obj.symbol === 'ssri' ? 'ssrm' : obj.symbol;
       // x.push(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=15min&apikey=O63CRR81WH26FIEQ`);
@@ -58,26 +62,31 @@ class DashboardPage extends React.Component {
         stockTicker: symbol
       });
     });
-    Promise.all(this.request(x)).then(array => {
-      array.forEach(e => {
-        console.log(e);
-        console.log(e.xhr);
+    return Promise.all(this.request(x)).then(array => {
+      array.forEach((e, index) => {
         var data = e.xhr.data;
         var currentPrice = data[0].close;
-        var symbol = e.symbol;
-        console.log(symbol, currentPrice);
+        var currentValue = utilityFunctions.toFixed(
+          currentPrice * currentPortfolioCopy[index].noOfShares
+        );
         // var key = e.target.response['Meta Data']['3. Last Refreshed'];
         // var symbol = e.target.response['Meta Data']['2. Symbol'];
         //var currentPrice =
         //  e.target.response['Time Series (1min)'][key]['1. open'];
-        this.setState({
-          [symbol]: {
-            currentPrice: currentPrice,
-            currentValue: utilityFunctions.toFixed(currentPrice)
-          }
+
+        var clonedUpdated = Object.assign({}, currentPortfolioCopy[index], {
+          currentPrice,
+          currentValue,
+          gainOrLoss: utilityFunctions.toFixed(
+            currentValue - currentPortfolioCopy[index].investedamount
+          )
         });
-        console.log(this.state);
-        //var string = 'The Current Price of ' + e.target.response['Meta Data']['2. Symbol'] + 'is ' + this.currentPrice + '.';
+        currentPortfolioCopy[index] = clonedUpdated;
+      });
+      this.setState(prevState => {
+        return {
+          currentPortfolio: currentPortfolioCopy
+        };
       });
     });
   }
@@ -98,7 +107,6 @@ class DashboardPage extends React.Component {
           data: xhr.response.data,
           currentPortfolio: xhr.response.data.portfolio
         });
-        console.log(this.state.data);
         this.getCurrentPrices();
       }
     });
@@ -111,10 +119,14 @@ class DashboardPage extends React.Component {
   render() {
     if (this.state.data) {
       return (
-        <UserProfile
-          secretData={this.state.secretData}
-          data={this.state.data}
-        />
+        <div>
+          <UserProfile
+            secretData={this.state.secretData}
+            data={this.state.data}
+            portfolio={this.state.currentPortfolio}
+          />
+          <PurchaseEquitiesContainer />
+        </div>
       );
     } else {
       return <div>Loading ... </div>;

@@ -2,12 +2,11 @@ import React, { PropTypes } from 'react';
 import { Link, IndexLink } from 'react-router';
 import Auth from '../modules/Auth';
 
-
 const Base = ({ children }) => (
   <div>
     <div className="top-bar">
       <div className="top-bar-left">
-        <IndexLink to="/">React Apps</IndexLink>
+        <IndexLink to="/">GAME OF STAWKS</IndexLink>
       </div>
 
       {Auth.isUserAuthenticated() ? (
@@ -20,12 +19,10 @@ const Base = ({ children }) => (
           <Link to="/signup">Sign up</Link>
         </div>
       )}
-
     </div>
 
-    { /* child component will be rendered here */ }
+    {/* child component will be rendered here */}
     {children}
-
   </div>
 );
 
