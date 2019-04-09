@@ -1,3 +1,5 @@
+/*
+NOT IN USE
 'use strict';
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
@@ -87,6 +89,6 @@ gulp.task('sass', function() {
       stream: true
     }));
 });
-
-gulp.watch('./public/scss/**/*.scss', ['sass']);
-gulp.task('start', ['watchify', 'browserSync']);
+*/
+//gulp.watch('./public/scss/**/*.scss', ['sass']);
+//gulp.task('start', ['watchify', 'browserSync']);
