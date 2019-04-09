@@ -44,7 +44,7 @@ const plugins = [
    ]
  }),
  new BundleAnalyzerPlugin({
-  analyzerMode: 'server',
+  analyzerMode: 'static',
   reportFilename: __dirname + '/bundleAnalyzerReport.html'
 }),
 ];
