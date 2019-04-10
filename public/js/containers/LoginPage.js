@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Auth from '../modules/Auth';
-import LoginForm from '../components/LoginForm.js';
+import SignIn from '../components/SignIn';
+import dataSource from '../services/dataSource';
 
 
 class LoginPage extends React.Component {
@@ -38,7 +39,7 @@ class LoginPage extends React.Component {
    *
    * @param {object} event - the JavaScript event object
    */
-  processForm(event) {
+  async processForm(event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
 
@@ -46,8 +47,22 @@ class LoginPage extends React.Component {
     const email = encodeURIComponent(this.state.user.email);
     const password = encodeURIComponent(this.state.user.password);
     const formData = `email=${email}&password=${password}`;
+    console.log(formData)
+    try {
+      const response = await dataSource.authorizeUser(formData);
+      console.log(response);
+    } catch(err) {
+      console.log(err)
+      const errors = (typeof err === "object") ? err : {};
+      errors.summary = "Something bad happened"
+      this.setState({
+        errors
+      });
+
+    }
 
     // create an AJAX request
+    /*
     const xhr = new XMLHttpRequest();
     xhr.open('post', '/auth/login');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -83,6 +98,7 @@ class LoginPage extends React.Component {
       }
     });
     xhr.send(formData);
+    */
   }
 
   /**
@@ -105,7 +121,7 @@ class LoginPage extends React.Component {
    */
   render() {
     return (
-      <LoginForm
+      <SignIn
         onSubmit={this.processForm}
         onChange={this.changeUser}
         errors={this.state.errors}
@@ -116,9 +132,5 @@ class LoginPage extends React.Component {
   }
 
 }
-
-LoginPage.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 export default LoginPage;
