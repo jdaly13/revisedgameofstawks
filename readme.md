@@ -11,4 +11,14 @@ npm install
 gulp start
 localhost:3099
 
+under configuration folder creat a configauth.js file and it needs to have following keys
+    sendGrid: {
+    user: {user},
+    pass: {password}
+    },
+    secret: '',
+    mongo: 'mongodb://{link}',
+    dummy: null,
+    "jwtSecret" : {whatever}
+
 sign up form and then purcahse stocks
