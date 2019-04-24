@@ -16,7 +16,7 @@ export function fetchContent(method, url, token, contentType, formData) {
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
-        xhr.timeout = 2000; // time in milliseconds
+        xhr.timeout = 3000; // time in milliseconds
         xhr.addEventListener('load', onSuccess.bind(xhr, res, rej));
         xhr.addEventListener('error', onFail.bind(xhr, rej));
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));

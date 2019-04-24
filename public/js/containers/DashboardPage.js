@@ -1,5 +1,6 @@
 import React from 'react';
 import Auth from '../modules/Auth';
+import dataSource from '../services/dataSource';
 import UserProfile from '../components/Dashboard.js';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 
@@ -13,14 +14,14 @@ var utilityFunctions = (function() {
 class DashboardPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.getCurrentPrices = this.getCurrentPrices.bind(this);
-    this.request = this.request.bind(this);
     this.state = {
       secretData: '',
       data: '',
       currentPortfolio: null,
       currentPrice: null
     };
+    this.getCurrentPrices = this.getCurrentPrices.bind(this);
+    this.request = this.request.bind(this);
   }
 
   request(arr) {
@@ -95,7 +96,30 @@ class DashboardPage extends React.Component {
    * This method will be executed after initial rendering.
    */
   componentDidMount() {
-    const xhr = new XMLHttpRequest();
+    if (this.props.info) {
+      this.setState({
+        data: this.props.info,
+        currentPortfolio: this.props.info.portfolio
+      })
+    } else {
+      try {
+        const response = await dataSource.getUserData(Auth.getToken());
+        console.log(response);
+        this.setState({
+          dbData: response.data.local
+        });
+        Auth.authenticateUser(xhr.response.token);
+      } catch(err) {
+        console.log(err)
+        const errors = (typeof err === "object") ? err : {};
+        errors.summary = "Something bad happened"
+        this.setState({
+          errors
+        });
+  
+      }
+    }
+    /*const xhr = new XMLHttpRequest();
     xhr.open('get', '/api/dashboard');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
@@ -111,6 +135,7 @@ class DashboardPage extends React.Component {
       }
     });
     xhr.send();
+    */
   }
 
   /**

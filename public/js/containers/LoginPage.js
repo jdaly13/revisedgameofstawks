@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Auth from '../modules/Auth';
 import SignIn from '../components/SignIn';
+import Dashboard from './DashboardPage';
 import dataSource from '../services/dataSource';
 
 
@@ -27,7 +28,8 @@ class LoginPage extends React.Component {
       user: {
         email: '',
         password: ''
-      }
+      },
+      dbData: null
     };
 
     this.processForm = this.processForm.bind(this);
@@ -51,6 +53,10 @@ class LoginPage extends React.Component {
     try {
       const response = await dataSource.authorizeUser(formData);
       console.log(response);
+      this.setState({
+        dbData: response.data.local
+      });
+      Auth.authenticateUser(xhr.response.token);
     } catch(err) {
       console.log(err)
       const errors = (typeof err === "object") ? err : {};
@@ -121,13 +127,19 @@ class LoginPage extends React.Component {
    */
   render() {
     return (
-      <SignIn
-        onSubmit={this.processForm}
-        onChange={this.changeUser}
-        errors={this.state.errors}
-        successMessage={this.state.successMessage}
-        user={this.state.user}
-      />
+      <React.Fragment>
+        {this.state.dbData ? (
+          <Dashboard info={this.state.dbData}/>
+        ) : (
+          <SignIn
+          onSubmit={this.processForm}
+          onChange={this.changeUser}
+          errors={this.state.errors}
+          successMessage={this.state.successMessage}
+          user={this.state.user}
+        />
+        )}
+      </React.Fragment>
     );
   }
 
