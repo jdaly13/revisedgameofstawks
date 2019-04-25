@@ -1,5 +1,4 @@
-import React, { PropTypes } from 'react';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
+import React from 'react';
 
 class UserProfile extends React.Component {
   constructor(props, context) {
@@ -15,17 +14,13 @@ class UserProfile extends React.Component {
 
   getDashBoard() {
     return (
-      <Card className="container">
-        <CardTitle
-          title="Dashboard"
-          subtitle="You should get access to this page only after authentication."
-        />
+      <main className="container">
         {this.secretData && (
-          <CardText style={{ fontSize: '16px', color: 'green' }}>
+          <section style={{ fontSize: '16px', color: 'green' }}>
             {this.secretData}
-          </CardText>
+          </section>
         )}
-      </Card>
+      </main>
     );
   }
 

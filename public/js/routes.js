@@ -6,7 +6,7 @@
 //import Auth from './modules/Auth.js';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import LoginPage from './containers/LoginPage';
+import HomePage from './containers/Home';
 
 
 
@@ -57,7 +57,7 @@ const AppRouting = ()  => {
       <Router >
       <Switch>
           <Route path="/" exact render={(props) => {
-              return <LoginPage {...props} />
+              return <HomePage {...props} />
           }} />
           <Redirect to="/" />
       </Switch>

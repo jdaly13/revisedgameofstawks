@@ -31,3 +31,5 @@ class HomeComponent extends React.Component {
     }
 
 }
+
+export default HomeComponent;

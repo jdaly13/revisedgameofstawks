@@ -95,7 +95,7 @@ class DashboardPage extends React.Component {
   /**
    * This method will be executed after initial rendering.
    */
-  componentDidMount() {
+  async componentDidMount() {
     if (this.props.info) {
       this.setState({
         data: this.props.info,
