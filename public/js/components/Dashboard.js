@@ -2,6 +2,7 @@ import React from 'react';
 
 class UserProfile extends React.Component {
   constructor(props, context) {
+    console.log(props);
     super(props, context);
     this.data = props.data;
     this.secretData = props.secretData;
@@ -88,7 +89,7 @@ class UserProfile extends React.Component {
       <div className="container">
         {this.getDashBoard()}
         {this.getHeadings()}
-        {!!this.portfolio.length && (
+        {this.portfolio.length && (
           <div>
             {this.getTitle()}
             {this.getPortfolio()}

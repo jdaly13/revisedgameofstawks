@@ -6,8 +6,6 @@ function onSuccess (res, rej) {
     }  
 }
 function onFail (rej) {
-    console.log(rej);
-    console.log(this);
     rej(this.status);
 }
 
@@ -21,10 +19,15 @@ export function fetchContent(method, url, token, contentType, formData) {
         xhr.addEventListener('error', onFail.bind(xhr, rej));
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));
         xhr.setRequestHeader('Content-type', contentType);
-        if (token) {
-            xhr.setRequestHeader('X-Token', token);
+        if (method === "POST") {
+            xhr.send(formData);
+        } else {
+            //xhr.setRequestHeader('X-Token', token);
+            xhr.setRequestHeader('Authorization', `bearer ${token}`);
+            xhr.send();
         }
-        xhr.send(formData || {});
+
+
 
     })
 }

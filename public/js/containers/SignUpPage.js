@@ -40,7 +40,7 @@ class SignUpPage extends React.Component {
     const formData = `name=${name}&email=${email}&password=${password}`;
 
     // create an AJAX request
-    const xhr = new XMLHttpRequest();
+    /*const xhr = new XMLHttpRequest();
     xhr.open('post', '/auth/signup');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.responseType = 'json';
@@ -71,6 +71,7 @@ class SignUpPage extends React.Component {
     });
     xhr.send(formData);
   }
+  */
 
   /**
    * Change the user object.

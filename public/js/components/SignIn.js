@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Header from '../partials/Header';
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   main: {
@@ -66,7 +67,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+        <Link to="/signup">Sign Up</Link>
         </Typography>
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errors.summary && <p className="error-message">{errors.summary}</p>}

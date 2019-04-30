@@ -6,10 +6,6 @@ import dataSource from '../services/dataSource';
 
 
 class LoginPage extends React.Component {
-
-  /**
-   * Class constructor.
-   */
   constructor(props, context) {
     super(props, context);
 
@@ -21,7 +17,6 @@ class LoginPage extends React.Component {
       localStorage.removeItem('successMessage');
     }
 
-    // set the initial component state
     this.state = {
       errors: {},
       successMessage,
@@ -36,11 +31,6 @@ class LoginPage extends React.Component {
     this.changeUser = this.changeUser.bind(this);
   }
 
-  /**
-   * Process the form.
-   *
-   * @param {object} event - the JavaScript event object
-   */
   async processForm(event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
@@ -49,14 +39,14 @@ class LoginPage extends React.Component {
     const email = encodeURIComponent(this.state.user.email);
     const password = encodeURIComponent(this.state.user.password);
     const formData = `email=${email}&password=${password}`;
-    console.log(formData)
+
     try {
       const response = await dataSource.authorizeUser(formData);
-      console.log(response);
+      Auth.authenticateUser(response.token);
       this.setState({
         dbData: response.data.local
       });
-      Auth.authenticateUser(xhr.response.token);
+
     } catch(err) {
       console.log(err)
       const errors = (typeof err === "object") ? err : {};
@@ -67,44 +57,6 @@ class LoginPage extends React.Component {
 
     }
 
-    // create an AJAX request
-    /*
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', '/auth/login');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
-        // success
-
-        // change the component-container state
-        this.setState({
-          errors: {},
-					data: xhr.response.data.local
-        });
-
-        // save the token
-        Auth.authenticateUser(xhr.response.token);
-
-				console.log(xhr.response.data.local);
-        // change the current URL to /
-        console.log(this.context, 'context');
-        this.context.router.replace('/');
-
-      } else {
-        // failure
-
-        // change the component state
-        const errors = xhr.response.errors ? xhr.response.errors : {};
-        errors.summary = xhr.response.message;
-
-        this.setState({
-          errors
-        });
-      }
-    });
-    xhr.send(formData);
-    */
   }
 
   /**
@@ -122,9 +74,6 @@ class LoginPage extends React.Component {
     });
   }
 
-  /**
-   * Render the component.
-   */
   render() {
     return (
       <React.Fragment>

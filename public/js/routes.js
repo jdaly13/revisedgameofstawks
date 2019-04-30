@@ -7,6 +7,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import HomePage from './containers/Home';
+import DashboardPage from './containers/DashboardPage';
+import SignUpPage from './containers/SignUpPage';
 
 
 
@@ -58,6 +60,12 @@ const AppRouting = ()  => {
       <Switch>
           <Route path="/" exact render={(props) => {
               return <HomePage {...props} />
+          }} />
+          <Route path="/profile" exact render={(props) => {
+              return <DashboardPage {...props} />
+          }} />
+          <Route path="/signup" exact render={(props) => {
+              return <SignUpPage {...props} />
           }} />
           <Redirect to="/" />
       </Switch>

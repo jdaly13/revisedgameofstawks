@@ -2,6 +2,7 @@ import React from 'react';
 import Auth from '../modules/Auth';
 import dataSource from '../services/dataSource';
 import UserProfile from '../components/Dashboard.js';
+import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 
 var utilityFunctions = (function() {
@@ -18,7 +19,8 @@ class DashboardPage extends React.Component {
       secretData: '',
       data: '',
       currentPortfolio: null,
-      currentPrice: null
+      currentPrice: null,
+      auth:true
     };
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
     this.request = this.request.bind(this);
@@ -96,19 +98,23 @@ class DashboardPage extends React.Component {
    * This method will be executed after initial rendering.
    */
   async componentDidMount() {
+    console.log('yes')
     if (this.props.info) {
       this.setState({
         data: this.props.info,
         currentPortfolio: this.props.info.portfolio
       })
     } else {
+      const token = Auth.getToken(); 
+      if (token) {
       try {
-        const response = await dataSource.getUserData(Auth.getToken());
+        const response = await dataSource.getUserData(token);
         console.log(response);
         this.setState({
-          dbData: response.data.local
+          data: response.data,
+          secretData: response.message,
+          currentPortfolio: response.data.portfolio
         });
-        Auth.authenticateUser(xhr.response.token);
       } catch(err) {
         console.log(err)
         const errors = (typeof err === "object") ? err : {};
@@ -116,7 +122,11 @@ class DashboardPage extends React.Component {
         this.setState({
           errors
         });
-  
+      }
+      } else {
+        this.setState({
+          auth:false
+        })
       }
     }
     /*const xhr = new XMLHttpRequest();
@@ -142,6 +152,9 @@ class DashboardPage extends React.Component {
    * Render the component.
    */
   render() {
+    if (!this.state.auth) {
+      return <LoginPage />
+    }
     if (this.state.data) {
       return (
         <div>

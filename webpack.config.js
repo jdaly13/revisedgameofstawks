@@ -43,10 +43,11 @@ const plugins = [
     },
    ]
  }),
- new BundleAnalyzerPlugin({
+ /*new BundleAnalyzerPlugin({
   analyzerMode: 'static',
   reportFilename: __dirname + '/bundleAnalyzerReport.html'
 }),
+*/
 ];
 
 const legacyConfig = {
