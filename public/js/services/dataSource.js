@@ -6,6 +6,9 @@ const dataSource = {
      },
      getUserData(token) {
          return fetchContent('GET', '/api/dashboard', token, 'application/x-www-form-urlencoded', null )
+     },
+     createUser(formData) {
+         
      }
 }
 
