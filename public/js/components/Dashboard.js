@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../partials/Header';
 
 class UserProfile extends React.Component {
   constructor(props, context) {
@@ -87,6 +88,7 @@ class UserProfile extends React.Component {
   render() {
     return (
       <div className="container">
+        <Header/>
         {this.getDashBoard()}
         {this.getHeadings()}
         {this.portfolio.length && (

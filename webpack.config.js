@@ -111,6 +111,5 @@ const moduleConfig = {
 }
 
 
-module.exports = [
-  legacyConfig, moduleConfig      
- ];
+//module.exports = [legacyConfig, moduleConfig];
+module.exports = moduleConfig

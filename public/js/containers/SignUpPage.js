@@ -1,13 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import SignUpForm from '../components/SignUpForm.js';
 import dataSource from '../services/dataSource';
 
 
 class SignUpPage extends React.Component {
 
-  /**
-   * Class constructor.
-   */
   constructor(props) {
     super(props);
 
@@ -72,8 +69,8 @@ class SignUpPage extends React.Component {
       }
     });
     xhr.send(formData);
+    */
   }
-  */
 
   /**
    * Change the user object.
@@ -105,9 +102,5 @@ class SignUpPage extends React.Component {
   }
 
 }
-
-SignUpPage.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 export default SignUpPage;

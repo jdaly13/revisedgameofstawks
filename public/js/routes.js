@@ -3,7 +3,7 @@
 //import DashboardPage from './containers/DashboardPage.js';
 //import LoginPage from './containers/LoginPage.js';
 //import SignUpPage from './containers/SignUpPage.js';
-//import Auth from './modules/Auth.js';
+import Auth from './modules/Auth.js';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import HomePage from './containers/Home';
@@ -66,6 +66,10 @@ const AppRouting = ()  => {
           }} />
           <Route path="/signup" exact render={(props) => {
               return <SignUpPage {...props} />
+          }} />
+          <Route path="/logout" exact render={(props) => {
+              Auth.deauthenticateUser();
+              return <HomePage {...props} />
           }} />
           <Redirect to="/" />
       </Switch>
