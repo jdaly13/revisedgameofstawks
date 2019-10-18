@@ -56,7 +56,6 @@ function SignIn(props) {
     successMessage,
     user 
   } = props;
-  console.log(props);
 
   return (
     <main className={classes.main}>
@@ -67,7 +66,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-        <Link to="/signup">Sign Up</Link>
+        <Link to="/signup">Sign In</Link>
         </Typography>
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errors.summary && <p className="error-message">{errors.summary}</p>}

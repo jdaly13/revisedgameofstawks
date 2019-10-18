@@ -24,7 +24,7 @@ class HomeComponent extends React.Component {
                 {this.state.auth ? (
                     <DashboardPage/>
                 ) : (
-                    <LoginPage/>
+                    <LoginPage />
                 )}
             </React.Fragment>
         )

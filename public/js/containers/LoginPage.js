@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Auth from '../modules/Auth';
 import SignIn from '../components/SignIn';
 import Dashboard from './DashboardPage';
@@ -26,10 +26,10 @@ class LoginPage extends React.Component {
       },
       dbData: null
     };
-
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
+
 
   async processForm(event) {
     // prevent default action. in this case, action is the form submission event
@@ -44,11 +44,11 @@ class LoginPage extends React.Component {
       const response = await dataSource.authorizeUser(formData);
       Auth.authenticateUser(response.token);
       this.setState({
+        auth: true,
         dbData: response.data.local
       });
-
     } catch(err) {
-      console.log(err)
+      console.warn(err);
       const errors = (typeof err === "object") ? err : {};
       errors.summary = "Something bad happened"
       this.setState({
