@@ -1,6 +1,8 @@
 import React from 'react';
 import Auth from '../modules/Auth';
+import dataSource from '../services/dataSource';
 import UserProfile from '../components/Dashboard.js';
+import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 
 var utilityFunctions = (function() {
@@ -13,110 +15,116 @@ var utilityFunctions = (function() {
 class DashboardPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.getCurrentPrices = this.getCurrentPrices.bind(this);
-    this.request = this.request.bind(this);
     this.state = {
       secretData: '',
       data: '',
       currentPortfolio: null,
-      currentPrice: null
+      currentPrice: null,
+      auth:true
     };
+    this.symbols = {};
+    this.getCurrentPrices = this.getCurrentPrices.bind(this);
+    this.request = this.request.bind(this);
   }
 
-  request(arr) {
-    let loadIt = (url, symbol) => {
-      return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest();
-        var auth =
-          'Basic ' +
-          new Buffer(
-            '85e8eba855c48add3015f6b7b571bdb4' +
-              ':' +
-              '1bd790ac89607fc5996edbbb00c23be9'
-          ).toString('base64');
-        xhr.responseType = 'json';
-        xhr.open('GET', url);
-        xhr.onload = () => {
-          resolve({ xhr: xhr.response, symbol: symbol });
-        };
-        xhr.onerror = reject;
-        xhr.setRequestHeader('Authorization', auth);
-        xhr.send();
-      });
-    };
-    return arr.map(obj => {
-      return loadIt(obj.url, obj.stockTicker);
-    });
+  request(url) {
+    return new Promise((res, rej) => {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
+      xhr.open('GET', url);
+      xhr.onload = () => {
+        res(xhr.response);
+      };
+      xhr.onerror = rej;
+      xhr.send();
+    })
+
   }
 
   getCurrentPrices() {
-    let x = [];
-    var currentPortfolioCopy = this.state.currentPortfolio.map(val =>
-      Object.assign({}, val)
-    );
-    this.state.currentPortfolio.forEach(obj => {
-      var symbol = obj.symbol === 'ssri' ? 'ssrm' : obj.symbol;
-      // x.push(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=15min&apikey=O63CRR81WH26FIEQ`);
-      x.push({
-        url: `https://api.intrinio.com/prices?identifier=${symbol.toUpperCase()}`,
-        stockTicker: symbol
-      });
+    const url = "https://cloud.iexapis.com/stable/tops/last?token=pk_4d0cd52a44c5411494f5868302139b73&symbols="
+    let str = ''
+    this.state.currentPortfolio.forEach((obj, index, arr) => {
+      var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol;
+      this.symbols[symbol] = Object.assign({}, obj);
+      str += !arr[index + 1] ? symbol : (symbol + ',');
     });
-    return Promise.all(this.request(x)).then(array => {
-      array.forEach((e, index) => {
-        var data = e.xhr.data;
-        var currentPrice = data[0].close;
-        var currentValue = utilityFunctions.toFixed(
-          currentPrice * currentPortfolioCopy[index].noOfShares
-        );
-        // var key = e.target.response['Meta Data']['3. Last Refreshed'];
-        // var symbol = e.target.response['Meta Data']['2. Symbol'];
-        //var currentPrice =
-        //  e.target.response['Time Series (1min)'][key]['1. open'];
+    const finalUrl = url + str;
+    console.log(finalUrl, str);
 
-        var clonedUpdated = Object.assign({}, currentPortfolioCopy[index], {
-          currentPrice,
-          currentValue,
-          gainOrLoss: utilityFunctions.toFixed(
-            currentValue - currentPortfolioCopy[index].investedamount
+    return this.request(finalUrl).then((res) => {
+      console.log(res);
+      var notRegistered = false;
+      res.forEach((obj) => {
+        var currentPrice = obj.price;
+        var currentValue;
+        var gainOrLoss;
+        var symbol = obj.symbol.toLowerCase();
+        var noOfShares = this.symbols[symbol] && this.symbols[symbol].noOfShares;
+        if (!noOfShares) {
+          notRegistered = true;
+          console.log(symbol);
+        } else {
+          currentValue = currentPrice * noOfShares;
+          gainOrLoss = utilityFunctions.toFixed(
+            currentValue - this.symbols[symbol].investedamount
           )
-        });
-        currentPortfolioCopy[index] = clonedUpdated;
-      });
-      this.setState(prevState => {
-        return {
-          currentPortfolio: currentPortfolioCopy
-        };
-      });
-    });
+          let portfolioCopy = [...this.state.currentPortfolio];
+          let index = portfolioCopy.findIndex((copy) => {
+            return copy.symbol === symbol;
+          });
+          console.log(symbol, currentValue, gainOrLoss, index);
+          portfolioCopy[index] = Object.assign({}, portfolioCopy[index], {currentPrice, currentValue, gainOrLoss})
+          this.setState({
+            currentPortfolio: portfolioCopy
+          })
+        }
+      })
+    }).catch((err) => {
+      console.warn(err);
+    })
   }
 
   /**
    * This method will be executed after initial rendering.
    */
-  componentDidMount() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', '/api/dashboard');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
+  async componentDidMount() {
+    if (this.props.info) {
+      this.setState({
+        data: this.props.info,
+        currentPortfolio: this.props.info.portfolio
+      })
+    } else {
+      const token = Auth.getToken(); 
+      if (token) {
+      try {
+        const response = await dataSource.getUserData(token);
         this.setState({
-          secretData: xhr.response.message,
-          data: xhr.response.data,
-          currentPortfolio: xhr.response.data.portfolio
+          data: response.data,
+          secretData: response.message,
+          currentPortfolio: response.data.portfolio
         });
         this.getCurrentPrices();
+      } catch(err) {
+        console.log(err)
+        const errors = (typeof err === "object") ? err : {};
+        errors.summary = "Something bad happened"
+        this.setState({
+          errors
+        });
       }
-    });
-    xhr.send();
+      } else {
+        this.setState({
+          auth:false
+        })
+      }
+    }
   }
 
-  /**
-   * Render the component.
-   */
   render() {
+    if (!this.state.auth) {
+      return <LoginPage />
+    }
     if (this.state.data) {
       return (
         <div>

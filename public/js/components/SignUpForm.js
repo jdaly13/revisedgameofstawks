@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import { Card, CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import React from 'react';
+import { Link } from 'react-router-dom';
+//import { Card, CardText } from 'material-ui/Card';
+//import RaisedButton from 'material-ui/RaisedButton';
+//import TextField from 'material-ui/TextField';
 
 
 const SignUpForm = ({
@@ -11,14 +11,14 @@ const SignUpForm = ({
   errors,
   user,
 }) => (
-  <Card className="container">
+  <section className="container">
     <form action="/" onSubmit={onSubmit}>
       <h2 className="card-heading">Sign Up</h2>
 
       {errors.summary && <p className="error-message">{errors.summary}</p>}
 
       <div className="field-line">
-        <TextField
+        <input
           floatingLabelText="Name"
           name="name"
           errorText={errors.name}
@@ -28,7 +28,7 @@ const SignUpForm = ({
       </div>
 
       <div className="field-line">
-        <TextField
+        <input
           floatingLabelText="Email"
           name="email"
           errorText={errors.email}
@@ -38,7 +38,7 @@ const SignUpForm = ({
       </div>
 
       <div className="field-line">
-        <TextField
+        <input
           floatingLabelText="Password"
           type="password"
           name="password"
@@ -49,19 +49,13 @@ const SignUpForm = ({
       </div>
 
       <div className="button-line">
-        <RaisedButton type="submit" label="Create New Account" primary />
+        <input type="submit" label="Create New Account"  />
       </div>
 
-      <CardText>Already have an account? <Link to={'/login'}>Log in</Link></CardText>
+      <div>Already have an account? <Link to={'/login'}>Log in</Link></div>
     </form>
-  </Card>
+  </section>
 );
 
-SignUpForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
-};
 
 export default SignUpForm;

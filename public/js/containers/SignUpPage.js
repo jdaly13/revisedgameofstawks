@@ -1,14 +1,12 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import SignUpForm from '../components/SignUpForm.js';
+import dataSource from '../services/dataSource';
 
 
 class SignUpPage extends React.Component {
 
-  /**
-   * Class constructor.
-   */
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     // set the initial component state
     this.state = {
@@ -29,7 +27,7 @@ class SignUpPage extends React.Component {
    *
    * @param {object} event - the JavaScript event object
    */
-  processForm(event) {
+  async processForm(event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
 
@@ -39,8 +37,9 @@ class SignUpPage extends React.Component {
     const password = encodeURIComponent(this.state.user.password);
     const formData = `name=${name}&email=${email}&password=${password}`;
 
+    const response = await dataSource.createUser(token);
     // create an AJAX request
-    const xhr = new XMLHttpRequest();
+    /*const xhr = new XMLHttpRequest();
     xhr.open('post', '/auth/signup');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.responseType = 'json';
@@ -70,6 +69,7 @@ class SignUpPage extends React.Component {
       }
     });
     xhr.send(formData);
+    */
   }
 
   /**
@@ -102,9 +102,5 @@ class SignUpPage extends React.Component {
   }
 
 }
-
-SignUpPage.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 export default SignUpPage;

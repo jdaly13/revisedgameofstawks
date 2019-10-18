@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
 
 class PurchaseEquities extends React.Component {
   constructor(props) {

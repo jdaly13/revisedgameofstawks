@@ -1,8 +1,9 @@
-import React, { PropTypes } from 'react';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
+import React from 'react';
+import Header from '../partials/Header';
 
 class UserProfile extends React.Component {
   constructor(props, context) {
+    console.log(props);
     super(props, context);
     this.data = props.data;
     this.secretData = props.secretData;
@@ -15,17 +16,13 @@ class UserProfile extends React.Component {
 
   getDashBoard() {
     return (
-      <Card className="container">
-        <CardTitle
-          title="Dashboard"
-          subtitle="You should get access to this page only after authentication."
-        />
+      <main className="container">
         {this.secretData && (
-          <CardText style={{ fontSize: '16px', color: 'green' }}>
+          <section style={{ fontSize: '16px', color: 'green' }}>
             {this.secretData}
-          </CardText>
+          </section>
         )}
-      </Card>
+      </main>
     );
   }
 
@@ -91,9 +88,10 @@ class UserProfile extends React.Component {
   render() {
     return (
       <div className="container">
+        <Header/>
         {this.getDashBoard()}
         {this.getHeadings()}
-        {!!this.portfolio.length && (
+        {this.portfolio.length && (
           <div>
             {this.getTitle()}
             {this.getPortfolio()}
