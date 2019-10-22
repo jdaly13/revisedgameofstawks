@@ -59,15 +59,15 @@ if (process.env.NODE_ENV === 'development' ) {
 //app.use(express.static('public'));
 
 app.get('*', function(req, res, next) {
-  //res.sendFile(path.resolve(__dirname, "./public/index.html"))
-  compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
+  res.sendFile(path.resolve(__dirname, "./dist/index.html"))
+  /*compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
     if (err) {
       return next(err)
     }
     res.set('content-type', 'text/html')
     res.send(result)
     res.end()
-    })
+    })*/
 });
 
 // launch ======================================================================

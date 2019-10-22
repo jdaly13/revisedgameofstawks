@@ -44,7 +44,9 @@ class DashboardPage extends React.Component {
   getCurrentPrices() {
     const url = "https://cloud.iexapis.com/stable/tops/last?token=pk_4d0cd52a44c5411494f5868302139b73&symbols="
     let str = ''
-    this.state.currentPortfolio.forEach((obj, index, arr) => {
+    const {currentPortfolio} = this.state;
+    if (!currentPortfolio.length) return; // no need to make call if no portfolio
+    currentPortfolio.forEach((obj, index, arr) => {
       var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol;
       this.symbols[symbol] = Object.assign({}, obj);
       str += !arr[index + 1] ? symbol : (symbol + ',');
@@ -73,7 +75,6 @@ class DashboardPage extends React.Component {
           let index = portfolioCopy.findIndex((copy) => {
             return copy.symbol === symbol;
           });
-          console.log(symbol, currentValue, gainOrLoss, index);
           portfolioCopy[index] = Object.assign({}, portfolioCopy[index], {currentPrice, currentValue, gainOrLoss})
           this.setState({
             currentPortfolio: portfolioCopy
@@ -93,26 +94,27 @@ class DashboardPage extends React.Component {
       this.setState({
         data: this.props.info,
         currentPortfolio: this.props.info.portfolio
-      })
+      }, this.getCurrentPrices);
+
     } else {
       const token = Auth.getToken(); 
       if (token) {
-      try {
-        const response = await dataSource.getUserData(token);
-        this.setState({
-          data: response.data,
-          secretData: response.message,
-          currentPortfolio: response.data.portfolio
-        });
-        this.getCurrentPrices();
-      } catch(err) {
-        console.log(err)
-        const errors = (typeof err === "object") ? err : {};
-        errors.summary = "Something bad happened"
-        this.setState({
-          errors
-        });
-      }
+        try {
+          const response = await dataSource.getUserData(token);
+          this.setState({
+            data: response.data,
+            secretData: response.message,
+            currentPortfolio: response.data.portfolio
+          });
+          this.getCurrentPrices();
+        } catch(err) {
+          console.log(err)
+          const errors = (typeof err === "object") ? err : {};
+          errors.summary = "Something bad happened"
+          this.setState({
+            errors
+          });
+        }
       } else {
         this.setState({
           auth:false

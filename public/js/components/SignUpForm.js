@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import { Card, CardText } from 'material-ui/Card';
-//import RaisedButton from 'material-ui/RaisedButton';
-//import TextField from 'material-ui/TextField';
+import TextField, {HelperText, Input} from '@material/react-text-field';
 
 
 const SignUpForm = ({
@@ -11,41 +9,44 @@ const SignUpForm = ({
   errors,
   user,
 }) => (
-  <section className="container">
+  <section className="container signin">
     <form action="/" onSubmit={onSubmit}>
       <h2 className="card-heading">Sign Up</h2>
 
       {errors.summary && <p className="error-message">{errors.summary}</p>}
 
       <div className="field-line">
-        <input
-          floatingLabelText="Name"
-          name="name"
-          errorText={errors.name}
-          onChange={onChange}
-          value={user.name}
-        />
+        <TextField
+          label='Name'
+          helperText={<HelperText>First and Last</HelperText>}
+        ><Input
+           name="name"
+           value={user.name}
+           onChange={onChange} />
+        </TextField>
       </div>
 
       <div className="field-line">
-        <input
-          floatingLabelText="Email"
-          name="email"
-          errorText={errors.email}
-          onChange={onChange}
-          value={user.email}
-        />
+        <TextField
+          label='Email'
+          helperText={<HelperText></HelperText>}
+        ><Input
+           name="email"
+           value={user.email}
+           onChange={onChange} />
+        </TextField>
       </div>
 
       <div className="field-line">
-        <input
-          floatingLabelText="Password"
-          type="password"
-          name="password"
-          onChange={onChange}
-          errorText={errors.password}
-          value={user.password}
-        />
+        <TextField
+          label='Password'
+          helperText={<HelperText>Minimum eight characters</HelperText>}
+        ><Input
+           value={user.password}
+           name="password"
+           onChange={onChange}
+           type="password" />
+        </TextField>
       </div>
 
       <div className="button-line">

@@ -78,6 +78,10 @@ function signup(body, res, next) {
         newUser.local.password = newUser.generateHash(body.password);
         newUser.local.startAmount = 100000.0;
         newUser.local.total = 0;
+        var payload = {
+          sub: newUser._id
+        },
+        token = jwt.sign(payload, config.jwtSecret);
 
         // save the user
         newUser.save(function(err) {
@@ -86,8 +90,8 @@ function signup(body, res, next) {
           }
           return res.json({
             success: true,
-            message:
-              'You have successfully signed up! Now you should be able to log in.'
+            message: 'You have successfully signed up! Now you should be able to log in.',
+            token
           });
         });
       }
