@@ -1,3 +1,4 @@
+@import '~@material/react-text-field/dist/text-field.css';
 body {
   margin: 0;
   font-size: 16px;
@@ -45,7 +46,8 @@ a:hover {
 .container {
   margin: 0 auto 1.5rem;
   text-align: center;
-  width: 700px;
+  max-width: 700px;
+  width:100%;
 }
 
 .card-heading {
@@ -85,4 +87,12 @@ span {
   color: black;
   text-transform: uppercase;
   font-size: 1rem;
+}
+
+.signin .field-line {
+  width:100%;
+}
+
+.mdc-text-field {
+  width:100%;
 }

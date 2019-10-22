@@ -42,11 +42,15 @@ class LoginPage extends React.Component {
 
     try {
       const response = await dataSource.authorizeUser(formData);
-      Auth.authenticateUser(response.token);
-      this.setState({
-        auth: true,
-        dbData: response.data.local
-      });
+      if (response.success) {
+        Auth.authenticateUser(response.token);
+        this.setState({
+          auth: true,
+          dbData: response.data.local
+        });
+     } else {
+       throw response;
+     }
     } catch(err) {
       console.warn(err);
       const errors = (typeof err === "object") ? err : {};

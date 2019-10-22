@@ -1,5 +1,5 @@
 ```
-Revised version of Game of Staws
+Revised version of Game of Stawks
 Built using React and React Router
 React, MongoDB, Mongoose, Express/Node stack
 
@@ -8,7 +8,7 @@ your fake portfolio is doing
 ```
 
 npm install
-npm run dev
+npm run buildDev
 localhost:3099
 
 sign up form and then purcahse stocks

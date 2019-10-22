@@ -1,6 +1,8 @@
 import React from 'react';
 import SignUpForm from '../components/SignUpForm.js';
+import Home from './Home';
 import dataSource from '../services/dataSource';
+import Auth from '../modules/Auth';
 
 
 class SignUpPage extends React.Component {
@@ -15,7 +17,8 @@ class SignUpPage extends React.Component {
         email: '',
         name: '',
         password: ''
-      }
+      },
+      signUpSuccess: false
     };
 
     this.processForm = this.processForm.bind(this);
@@ -37,39 +40,18 @@ class SignUpPage extends React.Component {
     const password = encodeURIComponent(this.state.user.password);
     const formData = `name=${name}&email=${email}&password=${password}`;
 
-    const response = await dataSource.createUser(token);
-    // create an AJAX request
-    /*const xhr = new XMLHttpRequest();
-    xhr.open('post', '/auth/signup');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
-        // success
+    try {
+      const response = await dataSource.createUser(formData);
+      Auth.authenticateUser(response.token);
+      this.setState({
+        signUpSuccess: true
+      })
+    } catch (e) {
+      console.log(e);
+      const errors = e.errors ? e.errors : {};
+    }
 
-        // change the component-container state
-        this.setState({
-          errors: {}
-        });
-
-        // set a message
-        localStorage.setItem('successMessage', xhr.response.message);
-
-        // make a redirect
-        this.context.router.replace('/login');
-      } else {
-        // failure
-
-        const errors = xhr.response.errors ? xhr.response.errors : {};
-        errors.summary = xhr.response.message;
-
-        this.setState({
-          errors
-        });
-      }
-    });
-    xhr.send(formData);
-    */
+    
   }
 
   /**
@@ -92,12 +74,17 @@ class SignUpPage extends React.Component {
    */
   render() {
     return (
-      <SignUpForm
-        onSubmit={this.processForm}
-        onChange={this.changeUser}
-        errors={this.state.errors}
-        user={this.state.user}
-      />
+      <React.Fragment>
+        {!this.state.signUpSuccess ? (
+        <SignUpForm
+          onSubmit={this.processForm}
+          onChange={this.changeUser}
+          errors={this.state.errors}
+          user={this.state.user}
+          /> ) : (
+        <Home />
+        )}
+      </React.Fragment>
     );
   }
 

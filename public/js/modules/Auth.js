@@ -15,7 +15,6 @@ class Auth {
    * @returns {boolean}
    */
   static isUserAuthenticated() {
-    console.log(localStorage.getItem('token') );
     return localStorage.getItem('token') !== null;
   }
 

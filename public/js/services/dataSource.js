@@ -8,7 +8,7 @@ const dataSource = {
          return fetchContent('GET', '/api/dashboard', token, 'application/x-www-form-urlencoded', null )
      },
      createUser(formData) {
-         
+        return fetchContent('POST', '/auth/signup', null, 'application/x-www-form-urlencoded', formData )
      }
 }
 

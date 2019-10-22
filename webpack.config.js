@@ -21,7 +21,12 @@ const cssRule = {
     use: [{
         loader: "css-loader", options: {minimize: true}
     }, {
-        loader: "sass-loader"
+        loader: "sass-loader",
+        options: {
+          includePaths: [
+              path.resolve(__dirname, "./node_modules/@material")
+          ]
+      }
     }],
     fallback: "style-loader"
   })
