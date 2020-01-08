@@ -3,7 +3,6 @@ import Header from '../partials/Header';
 
 class UserProfile extends React.Component {
   constructor(props, context) {
-    console.log(props);
     super(props, context);
     this.data = props.data;
     this.secretData = props.secretData;

@@ -1,3 +1,4 @@
+/* NOT IN USE
 import React from 'react';
 import { Card, CardTitle } from 'material-ui/Card';
 
@@ -10,3 +11,4 @@ var HomePage = function() {
 };
 
 export default HomePage;
+*/

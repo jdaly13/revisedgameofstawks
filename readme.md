@@ -19,3 +19,8 @@ clean up webpack
 create prod configuration  
 do research on IEX cloud for stock api  
 
+## STOCK API currently being used
+https://cloud.iexapis.com11
+
+
+

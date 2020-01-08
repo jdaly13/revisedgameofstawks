@@ -1,5 +1,7 @@
 import React from 'react';
 import ChooseEquities from '../components/PurchaseEquities.js';
+import configuration from '../services/constants';
+import dataSource from '../services/dataSource.js';
 
 var utilityFunctions = (function() {
   return {
@@ -46,13 +48,24 @@ class PurchaseEquitiesPage extends React.Component {
     // });
   }
 
+  getStockPrice(amount, symbol) {
+    let url = configuration.stockUrl + symbol;
+    console.log(amount);
+    const success = (resolution) => {
+      console.log(resolution);
+    }
+    dataSource.getStockData(url).then(success).catch((error) => {
+      console.log(error)
+    })
+  }
+
   /**
    * Render the component.
    */
   render() {
     return (
       <ChooseEquities
-        fetch={this.fetchStocks}
+        fetch={this.getStockPrice}
         toPurchase={this.state.equitiesToPurchase}
         currentPurchase={this.state.currentPurchase}
       />

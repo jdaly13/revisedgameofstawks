@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 class PurchaseEquities extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class PurchaseEquities extends React.Component {
             ref={input => {
               this.sharesToPurchase = input;
             }}
-            placeholder="200 must be a number"
+            placeholder="must be a number"
           />
         </div>
         <div className="content">

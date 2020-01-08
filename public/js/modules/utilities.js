@@ -10,7 +10,7 @@ function onFail (rej) {
 }
 
 //AJAX FETCH
-export function fetchContent(method, url, token, contentType, formData) {
+export function fetchContent(method, url, token, contentType, formData, external) {
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -23,7 +23,7 @@ export function fetchContent(method, url, token, contentType, formData) {
             xhr.send(formData);
         } else {
             //xhr.setRequestHeader('X-Token', token);
-            xhr.setRequestHeader('Authorization', `bearer ${token}`);
+            if (!external) {xhr.setRequestHeader('Authorization', `bearer ${token}`)};
             xhr.send();
         }
 

@@ -1,6 +1,6 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import SignUpForm from '../components/SignUpForm.js';
-import Home from './Home';
 import dataSource from '../services/dataSource';
 import Auth from '../modules/Auth';
 
@@ -43,9 +43,7 @@ class SignUpPage extends React.Component {
     try {
       const response = await dataSource.createUser(formData);
       Auth.authenticateUser(response.token);
-      this.setState({
-        signUpSuccess: true
-      })
+      this.props.history.push("/profile"+this.props.history.location.search)
     } catch (e) {
       console.log(e);
       const errors = e.errors ? e.errors : {};
@@ -74,20 +72,15 @@ class SignUpPage extends React.Component {
    */
   render() {
     return (
-      <React.Fragment>
-        {!this.state.signUpSuccess ? (
         <SignUpForm
           onSubmit={this.processForm}
           onChange={this.changeUser}
           errors={this.state.errors}
           user={this.state.user}
-          /> ) : (
-        <Home />
-        )}
-      </React.Fragment>
+          /> 
     );
   }
 
 }
 
-export default SignUpPage;
+export default withRouter(SignUpPage);

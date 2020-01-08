@@ -4,6 +4,7 @@ import dataSource from '../services/dataSource';
 import UserProfile from '../components/Dashboard.js';
 import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
+import configuration from '../services/constants';
 
 var utilityFunctions = (function() {
   return {
@@ -24,25 +25,11 @@ class DashboardPage extends React.Component {
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
-    this.request = this.request.bind(this);
-  }
-
-  request(url) {
-    return new Promise((res, rej) => {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
-      xhr.open('GET', url);
-      xhr.onload = () => {
-        res(xhr.response);
-      };
-      xhr.onerror = rej;
-      xhr.send();
-    })
 
   }
 
   getCurrentPrices() {
-    const url = "https://cloud.iexapis.com/stable/tops/last?token=pk_4d0cd52a44c5411494f5868302139b73&symbols="
+    const url = configuration.stockUrl;
     let str = ''
     const {currentPortfolio} = this.state;
     if (!currentPortfolio.length) return; // no need to make call if no portfolio
@@ -54,7 +41,7 @@ class DashboardPage extends React.Component {
     const finalUrl = url + str;
     console.log(finalUrl, str);
 
-    return this.request(finalUrl).then((res) => {
+    return dataSource.getStockData(finalUrl).then((res) => {
       console.log(res);
       var notRegistered = false;
       res.forEach((obj) => {
@@ -85,15 +72,12 @@ class DashboardPage extends React.Component {
       console.warn(err);
     })
   }
-
-  /**
-   * This method will be executed after initial rendering.
-   */
+  
   async componentDidMount() {
-    if (this.props.info) {
+    if (this.props.location.state) {
       this.setState({
-        data: this.props.info,
-        currentPortfolio: this.props.info.portfolio
+        data: this.props.location.state,
+        currentPortfolio: this.props.location.state.portfolio
       }, this.getCurrentPrices);
 
     } else {

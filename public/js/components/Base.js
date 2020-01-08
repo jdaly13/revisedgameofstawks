@@ -1,3 +1,4 @@
+/* NOT IN USE
 import React, { PropTypes } from 'react';
 import { Link, IndexLink } from 'react-router';
 import Auth from '../modules/Auth';
@@ -21,7 +22,7 @@ const Base = ({ children }) => (
       )}
     </div>
 
-    {/* child component will be rendered here */}
+
     {children}
   </div>
 );
@@ -31,3 +32,5 @@ Base.propTypes = {
 };
 
 export default Base;
+
+*/
