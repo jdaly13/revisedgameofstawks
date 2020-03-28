@@ -30,13 +30,11 @@ class UserProfile extends React.Component {
       <div>
         <strong>Your Start Amount: {this.data.startAmount}</strong>
         <h1>
-          {' '}
-          Your Net Balance:{' '}
+          Your Net Balance:&nbsp;
           {this.data.netBalance ? this.data.netBalance : this.data.startAmount}
         </h1>
         <h2>
-          {' '}
-          Your Portfolio Value:{' '}
+          Your Portfolio Value:&nbsp; 
           {this.data.portfolioValue
             ? this.data.portfolioValue
             : this.data.startAmount}{' '}

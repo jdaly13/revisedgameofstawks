@@ -74,6 +74,7 @@ class DashboardPage extends React.Component {
   }
   
   async componentDidMount() {
+    console.log(this.props)
     if (this.props.location.state) {
       this.setState({
         data: this.props.location.state,
