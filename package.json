@@ -8,7 +8,8 @@
     "dev": "webpack && node server.js",
     "build": "webpack",
     "development": "NODE_ENV=development node server.js",
-    "buildDev": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=development node server.js"
+    "buildDev": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=development node server.js",
+    "buildDevWindows": "webpack --config webpack.dev.config.js && set NODE_ENV=development&& node server.js"
   },
   "keywords": [
     "stocks",

@@ -1,3 +1,4 @@
+var User =    require('./models/user');
 module.exports = function(express) {
   const router = new express.Router();
   router.get('/dashboard', (_req, res) => {
@@ -10,12 +11,12 @@ module.exports = function(express) {
 
   router.post('/purchaseequities', (req, res, done) => {
     var action = req.body.buyorsell,
-        investedAmount = +parseFloat(req.body.investedamount).toFixed(2),
         price = +parseFloat(req.body.price).toFixed(2),
         noOfShares = +parseFloat(req.body.noOfShares).toFixed(2),
         symbol = req.body.symbol,
         name = req.body.name || "Not Available Currently",
         alreadyInPortfolio = false,
+        investedAmount = price * noOfShares,
         existingIndex = false;
 
     function buyAction (user) {
@@ -34,39 +35,52 @@ module.exports = function(express) {
     }
 
 
-    function findoutGainOrLossNetBalanceAndPortfolioValue (portfolio, investedAmount, availableBalance) {
-      var totalValue;
+    function findoutGainOrLossNetBalanceAndPortfolioValue (portfolio, totalinvestedamount, availableBalance) {
+      var totalValue = 0;
+
       portfolio.forEach(function(obj,index) {
-          totalValue += obj.noOfShares * price
+          totalValue += obj.investedamount;
       });
-      console.log(totalValue, portfolio, investedAmount, availableBalance);
+      console.log('totalValue', totalValue, 'totalinvestedamount', totalinvestedamount, 'availablebalance', availableBalance);
+      const gainOrLoss = totalValue - totalinvestedamount;
       return {
-        gainOrLoss: totalValue - investedAmount,
-        netBalance: availableBalance + this.gainOrLoss,
-        portfolioValue: investedAmount + this.gainOrLoss
+        gainOrLoss: gainOrLoss,
+        netBalance: availableBalance + gainOrLoss,
+        portfolioValue: totalinvestedamount + gainOrLoss
       };
 
     }
 
-    User.findOne({ 'local.email' :  req.user.local.email }, function(err, user) {
+    User.findOne({ 'local.email' :  res.data.email}, function(err, user) {
         // if there are any errors, return the error before anything else
         var obj = {};
+
+        const copied = JSON.parse(JSON.stringify(user.local));
         if (err)
-            return done(err);
+            return res.status(500).json({
+                message: "service unavailable",
+                error: err
+            })
 
         // if no user is found, return the message
-        if (!user)
-            return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+        if (!user) {
+            //return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+            return res.status(404).json({
+                message: "user not found"
+            });
+        }
 
-        var portfolio = user.local.portfolio,
-            pushObject = {};
 
-            if (!buyAction(user.local)) {
-                req.flash('sillyGoose', 'You don\'t got that much money fool, Go Back and choose again');
+
+            if (!buyAction(copied)) {
+                //req.flash('sillyGoose', 'You don\'t got that much money fool, Go Back and choose again');
+                return res.status(400).json({
+                    message: "You don't have enough funds"
+                })
             } else {
-                user.local.availableBalance = user.local.availableBalance - investedAmount;
-                user.local.totalInvestedAmount += investedAmount;
-                portfolio.forEach(function (obj, index) {
+                copied.availableBalance = copied.availableBalance - investedAmount;
+                copied.totalInvestedAmount += investedAmount;
+                copied.portfolio.forEach(function (obj, index) {
                     if (obj.symbol === symbol) {
                         obj.noOfShares += noOfShares;
                         obj.investedamount += investedAmount;
@@ -84,27 +98,30 @@ module.exports = function(express) {
                         pershareavg: price,
                         investedamount: investedAmount
                     }
-                    portfolio.push(pushObject)
+                   copied.portfolio.push(pushObject);
                 }
-
-              obj = findoutGainOrLossNetBalanceAndPortfolioValue(portfolio, user.local.totalInvestedAmount, user.local.availableBalance);
-              console.log(obj);
-              user.local.gainOrLoss = obj.gainOrLoss;
-              user.local.netBalance = obj.netBalance;
-              user.local.portfolioValue = obj.portfolioValue;
+                console.log('copied obj', copied);
+              obj = findoutGainOrLossNetBalanceAndPortfolioValue(copied.portfolio, copied.totalInvestedAmount, copied.availableBalance);
+              copied.gainOrLoss = obj.gainOrLoss;
+              copied.netBalance = obj.netBalance;
+              copied.portfolioValue = obj.portfolioValue;
+              user.local = copied;
             }
 
-
+        
         user.save(function(err) {
-            if (err)
-                throw err;
-            res.send({
+            if (err) {
+                return res.status(500).json({
+                    error:err
+                })
+            }
+               
+            return res.status(200).json({
                 success:true,
-                portfolio: (action === 'buy') ? (!alreadyInPortfolio) ? pushObject : portfolio[existingIndex] : portfolio[existingIndex],
+                portfolio: (action === 'buy') ? (!alreadyInPortfolio) ? pushObject : user.local.portfolio[existingIndex] : user.local.portfolio[existingIndex],
                 id: symbol,
                 availableBalance: user.local.availableBalance,
                 netBalance: user.local.netBalance,
-                flashMessage: req.flash('sillyGoose')
             });
         });
     });

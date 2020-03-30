@@ -12,6 +12,9 @@ const dataSource = {
      },
      getStockData(url) {
         return fetchContent('GET', url, null, 'application/json', null, true )
+     },
+     makePurchase(token, body) {
+        return fetchContent('POST', 'api/purchaseequities', token, 'application/json', body, false )
      }
 }
 

@@ -6,7 +6,7 @@ function onSuccess (res, rej) {
     }  
 }
 function onFail (rej) {
-    rej(this.status);
+    rej(JSON.parse(this.responseText));
 }
 
 //AJAX FETCH
@@ -20,7 +20,12 @@ export function fetchContent(method, url, token, contentType, formData, external
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));
         xhr.setRequestHeader('Content-type', contentType);
         if (method === "POST") {
-            xhr.send(formData);
+            if (!token) { 
+                xhr.send(formData) 
+            } else {
+                xhr.setRequestHeader('Authorization', `bearer ${token}`);
+                xhr.send(formData);
+            }
         } else {
             //xhr.setRequestHeader('X-Token', token);
             if (!external) {xhr.setRequestHeader('Authorization', `bearer ${token}`)};

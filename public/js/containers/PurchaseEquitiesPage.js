@@ -14,6 +14,7 @@ class PurchaseEquitiesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.fetchStocks = this.fetchStocks.bind(this);
+    this.getStockPrice = this.getStockPrice.bind(this);
     this.state = {};
     this.state.equitiesToPurchase = [];
     this.state.currentPurchase = {};
@@ -50,9 +51,15 @@ class PurchaseEquitiesPage extends React.Component {
 
   getStockPrice(amount, symbol) {
     let url = configuration.stockUrl + symbol;
-    console.log(amount);
-    const success = (resolution) => {
-      console.log(resolution);
+    console.log(amount, this.props);
+    const success = (data) => {
+      const resolution = data[0]
+      const objToSend = {symbol: resolution.symbol, price: resolution.price, noOfShares:amount, buyorsell:"buy", time: resolution.time};
+      dataSource.makePurchase(this.props.token, JSON.stringify(objToSend)).then((res)=>{
+        console.log('response', res);
+      }).catch((err)=>{
+        console.log('failure', err)
+      })
     }
     dataSource.getStockData(url).then(success).catch((error) => {
       console.log(error)

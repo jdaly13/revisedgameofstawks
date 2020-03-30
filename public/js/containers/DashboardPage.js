@@ -21,7 +21,8 @@ class DashboardPage extends React.Component {
       data: '',
       currentPortfolio: null,
       currentPrice: null,
-      auth:true
+      auth:true,
+      token: Auth.getToken(),
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
@@ -82,10 +83,11 @@ class DashboardPage extends React.Component {
       }, this.getCurrentPrices);
 
     } else {
-      const token = Auth.getToken(); 
+      const { token } = this.state
       if (token) {
         try {
           const response = await dataSource.getUserData(token);
+          console.log(response);
           this.setState({
             data: response.data,
             secretData: response.message,
@@ -120,7 +122,7 @@ class DashboardPage extends React.Component {
             data={this.state.data}
             portfolio={this.state.currentPortfolio}
           />
-          <PurchaseEquitiesContainer />
+          <PurchaseEquitiesContainer token={this.state.token} />
         </div>
       );
     } else {
