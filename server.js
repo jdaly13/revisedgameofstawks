@@ -5,6 +5,8 @@ var port = process.env.PORT || 3099;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
+require('dotenv').config({path: __dirname + '/.env'})
+
 var configDBurl = require('./configuration/database.js').url;
 const mongoooseOptions = {
   useMongoClient: true,

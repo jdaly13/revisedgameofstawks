@@ -88,7 +88,8 @@ const legacyConfig = {
 const moduleConfig = {
  entry,
  output: {
-   path: path.resolve(__dirname, "public"),
+   path: path.resolve(__dirname, "dist"),
+   publicPath: '/',
    filename: "[name].mjs"
  },
  module: {
@@ -112,7 +113,7 @@ const moduleConfig = {
    ]
  },
  plugins,
- mode: "development"
+ mode: "production"
 }
 
 
