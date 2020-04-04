@@ -35,6 +35,7 @@ class DashboardPage extends React.Component {
     const {currentPortfolio} = this.state;
     if (!currentPortfolio.length) return; // no need to make call if no portfolio
     currentPortfolio.forEach((obj, index, arr) => {
+      console.log(obj)
       var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol;
       this.symbols[symbol] = Object.assign({}, obj);
       str += !arr[index + 1] ? symbol : (symbol + ',');
@@ -51,6 +52,7 @@ class DashboardPage extends React.Component {
         var gainOrLoss;
         var symbol = obj.symbol.toLowerCase();
         var noOfShares = this.symbols[symbol] && this.symbols[symbol].noOfShares;
+        console.log('noofshares', this.symbols[symbol])
         if (!noOfShares) {
           notRegistered = true;
           console.log(symbol);

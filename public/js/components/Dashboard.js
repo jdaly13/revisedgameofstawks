@@ -66,7 +66,7 @@ class UserProfile extends React.Component {
     return this.portfolio.map((obj, index) => (
       <div key={obj._id} id={obj.symbol}>
         <span>
-          You have {obj.noOfShares} shares of {obj.name}.{' '}
+          You have {obj.noOfShares} shares of {obj.name === "Not Available Currently" ? obj.symbol : obj.name}
         </span>
         <span>
           The average price paid per share is {obj.pershareavg} and your total
@@ -74,7 +74,7 @@ class UserProfile extends React.Component {
         </span>
         <span>
           {' '}
-          The Current Price of {obj.name} is {obj.currentPrice}{' '}
+          The Current Price of {obj.name === "Not Available Currently" ? obj.symbol : obj.name} is {obj.currentPrice}
         </span>
         <span> The current value of your stock is {obj.currentValue} </span>
         <span> Your current gain or loss is {obj.gainOrLoss} </span>

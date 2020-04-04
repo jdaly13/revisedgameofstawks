@@ -54,6 +54,8 @@ if (process.env.NODE_ENV === 'development' ) {
   });
   app.use(midWare);
   app.use(wpHotMiddleWare(compiler));
+} else {
+  app.use(express.static('dist'));
 }
 
 //app.use(express.static('public'));
