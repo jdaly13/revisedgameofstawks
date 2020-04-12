@@ -27,7 +27,8 @@ const AppRouting = ()  => {
           <Route path="/logout" exact render={(props) => {
               Auth.deauthenticateUser();
               return (
-                <LoginPage {...props} />
+                //<LoginPage {...props} />
+                <Redirect to="/" />
               );
           }} />
           <Redirect to="/" />

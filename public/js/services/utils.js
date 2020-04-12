@@ -7,3 +7,10 @@ export function changeUser () {
       user
     });
 }
+
+export function handleToggleModal(...args) {
+  this.setState({ 
+      showModal: !this.state.showModal,
+      whichModal: args[1]
+  });
+}

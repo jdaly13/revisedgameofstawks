@@ -52,5 +52,10 @@ heroku local web
 https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment
 
 
+### BUGS  
+fix error of not pinging database on page refresh on dashboard
+also fix bug of posting content of share symbols to lowercase e.g. IAG - iag right not posting in uppercase
+
+
 
 

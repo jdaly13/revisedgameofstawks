@@ -54,7 +54,7 @@ class PurchaseEquitiesPage extends React.Component {
     console.log(amount, this.props);
     const success = (data) => {
       const resolution = data[0]
-      const objToSend = {symbol: resolution.symbol, price: resolution.price, noOfShares:amount, buyorsell:"buy", time: resolution.time};
+      const objToSend = {symbol: resolution.symbol.toLowerCase(), price: resolution.price, noOfShares:amount, buyorsell:"buy", time: resolution.time};
       dataSource.makePurchase(this.props.token, JSON.stringify(objToSend)).then((res)=>{
         console.log('response', res);
       }).catch((err)=>{
