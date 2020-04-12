@@ -15,8 +15,6 @@ const mongoooseOptions = {
   reconnectTries: 30
 };
 
-const DIST_DIR = __dirname;
-const HTML_FILE = path.join(DIST_DIR, 'index.html')
 
 // configuration ===============================================================
 mongoose.connect(configDBurl, mongoooseOptions);
@@ -24,8 +22,6 @@ mongoose.connect(configDBurl, mongoooseOptions);
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-//app.use(express.static('live'));
 
 
 //to use API to fetch user data
@@ -56,22 +52,13 @@ if (process.env.NODE_ENV === 'development' ) {
   });
   app.use(midWare);
   app.use(wpHotMiddleWare(compiler));
-} else {
+} else { // production
   app.use(express.static('dist'));
 }
 
-//app.use(express.static('public'));
-
 app.get('*', function(req, res, next) {
   res.sendFile(path.resolve(__dirname, "./dist/index.html"))
-  /*compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
-    if (err) {
-      return next(err)
-    }
-    res.set('content-type', 'text/html')
-    res.send(result)
-    res.end()
-    })*/
+
 });
 
 // launch ======================================================================
