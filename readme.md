@@ -1,4 +1,5 @@
 ### Revised version of Game of Stawks  
+Live version - https://game-of-stawks.herokuapp.com/  
 Built using React and React Router  
 React, MongoDB, Mongoose, Express/Node stack  
 
