@@ -26,11 +26,12 @@ https://cloud.iexapis.com11
 
 ## DEPLOY TO HEROKU  
 https://devcenter.heroku.com/changelog-items/1557  - will run build script automatically   
-if deploying another branch if deploying master  
+if deploying another branch  
 
 ```
 git push heroku startRefactor:master
-```  
+``` 
+ if deploying master   
 
 ```
 git push heroku master
