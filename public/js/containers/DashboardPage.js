@@ -5,14 +5,8 @@ import UserProfile from '../components/Dashboard.js';
 import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 import configuration from '../services/constants';
+import { utilityFunctions } from '../modules/utilities';
 
-var utilityFunctions = (function() {
-  return {
-    toFixed: function(num) {
-      return +parseFloat(num).toFixed(2);
-    }
-  };
-})();
 class DashboardPage extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -35,17 +29,14 @@ class DashboardPage extends React.Component {
     const {currentPortfolio} = this.state;
     if (!currentPortfolio.length) return; // no need to make call if no portfolio
     currentPortfolio.forEach((obj, index, arr) => {
-      console.log(obj)
-      var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol;
+      var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol; //remove this hack
       this.symbols[symbol] = Object.assign({}, obj);
       str += !arr[index + 1] ? symbol : (symbol + ',');
     });
     const finalUrl = url + str;
-    console.log(finalUrl, str);
 
     return dataSource.getStockData(finalUrl).then((res) => {
-      console.log(res);
-      var notRegistered = false;
+      var totalGainOrLoss = 0;
       res.forEach((obj) => {
         var currentPrice = obj.price;
         var currentValue;
@@ -54,7 +45,6 @@ class DashboardPage extends React.Component {
         var noOfShares = this.symbols[symbol] && this.symbols[symbol].noOfShares;
         console.log('noofshares', this.symbols[symbol])
         if (!noOfShares) {
-          notRegistered = true;
           console.log(symbol);
         } else {
           currentValue = currentPrice * noOfShares;
@@ -65,11 +55,18 @@ class DashboardPage extends React.Component {
           let index = portfolioCopy.findIndex((copy) => {
             return copy.symbol === symbol;
           });
+          totalGainOrLoss += gainOrLoss;
           portfolioCopy[index] = Object.assign({}, portfolioCopy[index], {currentPrice, currentValue, gainOrLoss})
           this.setState({
             currentPortfolio: portfolioCopy
           })
         }
+      });
+
+      var portfolioVal = this.state.data.totalInvestedAmount + totalGainOrLoss;
+      var netBlnce = this.state.data.availableBalance + totalGainOrLoss;
+      this.setState({
+        data: Object.assign({}, this.state.data, {gainOrLoss: totalGainOrLoss, portfolioValue: portfolioVal, netBalance: netBlnce})
       })
     }).catch((err) => {
       console.warn(err);
@@ -77,7 +74,6 @@ class DashboardPage extends React.Component {
   }
   
   async componentDidMount() {
-    console.log(this.props)
     if (this.props.location.state) {
       this.setState({
         data: this.props.location.state,

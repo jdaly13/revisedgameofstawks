@@ -55,35 +55,35 @@ const plugins = [
 */
 ];
 
-const legacyConfig = {
-  entry,
-  output: {
-    path: path.resolve(__dirname, "public"),
-    filename: "[name].bundle.js"
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: "babel-loader",
-        options: {
-          presets: [
-            ["@babel/preset-react", {
-              useBuiltIns: "usage",
-              targets: {
-                esmodules: false
-              },
-            }],
-          ],
-        },
-      },
-      cssRule
-    ]
-  },
-  plugins,
-  mode: "development"
- }
+// const legacyConfig = {
+//   entry,
+//   output: {
+//     path: path.resolve(__dirname, "public"),
+//     filename: "[name].bundle.js"
+//   },
+//   module: {
+//     rules: [
+//       {
+//         test: /\.js$/,
+//         exclude: /node_modules/,
+//         loader: "babel-loader",
+//         options: {
+//           presets: [
+//             ["@babel/preset-react", {
+//               useBuiltIns: "usage",
+//               targets: {
+//                 esmodules: false
+//               },
+//             }],
+//           ],
+//         },
+//       },
+//       cssRule
+//     ]
+//   },
+//   plugins,
+//   mode: "development"
+// }
 
 const moduleConfig = {
  entry,

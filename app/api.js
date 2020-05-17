@@ -35,21 +35,21 @@ module.exports = function(express) {
     }
 
 
-    function findoutGainOrLossNetBalanceAndPortfolioValue (portfolio, totalinvestedamount, availableBalance) {
-      var totalValue = 0;
+    // function findoutGainOrLossNetBalanceAndPortfolioValue (portfolio, totalinvestedamount, availableBalance) {
+    //   var totalValue = 0;
 
-      portfolio.forEach(function(obj,index) {
-          totalValue += obj.investedamount;
-      });
-      console.log('totalValue', totalValue, 'totalinvestedamount', totalinvestedamount, 'availablebalance', availableBalance);
-      const gainOrLoss = totalValue - totalinvestedamount;
-      return {
-        gainOrLoss: gainOrLoss,
-        netBalance: availableBalance + gainOrLoss,
-        portfolioValue: totalinvestedamount + gainOrLoss
-      };
+    //   portfolio.forEach(function(obj,index) {
+    //       totalValue += obj.investedamount;
+    //   });
+    //   console.log('totalValue', totalValue, 'totalinvestedamount', totalinvestedamount, 'availablebalance', availableBalance);
+    //   const gainOrLoss = totalValue - totalinvestedamount;
+    //   return {
+    //     gainOrLoss: gainOrLoss,
+    //     netBalance: availableBalance + gainOrLoss,
+    //     portfolioValue: totalinvestedamount + gainOrLoss
+    //   };
 
-    }
+    // }
 
     User.findOne({ 'local.email' :  res.data.email}, function(err, user) {
         // if there are any errors, return the error before anything else
@@ -101,10 +101,10 @@ module.exports = function(express) {
                    copied.portfolio.push(pushObject);
                 }
                 console.log('copied obj', copied);
-              obj = findoutGainOrLossNetBalanceAndPortfolioValue(copied.portfolio, copied.totalInvestedAmount, copied.availableBalance);
-              copied.gainOrLoss = obj.gainOrLoss;
-              copied.netBalance = obj.netBalance;
-              copied.portfolioValue = obj.portfolioValue;
+            //   obj = findoutGainOrLossNetBalanceAndPortfolioValue(copied.portfolio, copied.totalInvestedAmount, copied.availableBalance);
+            //   copied.gainOrLoss = obj.gainOrLoss;
+            //   copied.netBalance = obj.netBalance;
+            //   copied.portfolioValue = obj.portfolioValue;
               user.local = copied;
             }
 

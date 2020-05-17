@@ -7,10 +7,12 @@ class UserProfile extends React.Component {
     this.data = props.data;
     this.secretData = props.secretData;
     this.portfolio = props.portfolio;
+    console.log('data', props.data);
   }
 
   componentWillReceiveProps(nextProps) {
     this.portfolio = nextProps.portfolio;
+    this.data = nextProps.data;
   }
 
   getDashBoard() {
@@ -30,11 +32,11 @@ class UserProfile extends React.Component {
       <div>
         <strong>Your Start Amount: {this.data.startAmount}</strong>
         <h1>
-          Your Net Balance:&nbsp;
+          Your Net Balance:&nbsp; (Your available balance plus gainorloss)
           {this.data.netBalance ? this.data.netBalance : this.data.startAmount}
         </h1>
         <h2>
-          Your Portfolio Value:&nbsp; 
+          Your Portfolio Value (investedamount plus gainorloss):&nbsp; 
           {this.data.portfolioValue
             ? this.data.portfolioValue
             : this.data.startAmount}{' '}
@@ -47,17 +49,17 @@ class UserProfile extends React.Component {
   getTitle() {
     return (
       <div>
-        <h3> {this.data.availableBalance} </h3>
+        <h3> Your available balance to spend {this.data.availableBalance} </h3>
         <h3>
-          Your gain loss: <span>{this.data.gainOrLoss} </span>{' '}
+          Your gain loss: <span>{this.data.gainOrLoss} </span> 
         </h3>
-        <h3>
-          Your net balance: <span>{this.data.netBalance}</span>{' '}
-        </h3>
-        <h3>
+        {/* <h3>
+          Your net balance: <span>{this.data.netBalance}</span> 
+        </h3> */}
+        {/* <h3>
           {' '}
           Your portfolio Value: <span> {this.data.portfolioValue} </span>
-        </h3>
+        </h3> */}
       </div>
     );
   }
@@ -73,7 +75,6 @@ class UserProfile extends React.Component {
           invested amount is {obj.investedamount + ' '}{' '}
         </span>
         <span>
-          {' '}
           The Current Price of {obj.name === "Not Available Currently" ? obj.symbol : obj.name} is {obj.currentPrice}
         </span>
         <span> The current value of your stock is {obj.currentValue} </span>

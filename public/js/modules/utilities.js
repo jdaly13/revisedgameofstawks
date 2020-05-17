@@ -36,3 +36,9 @@ export function fetchContent(method, url, token, contentType, formData, external
 
     })
 }
+
+export const utilityFunctions = {
+    toFixed: function(num) {
+        return +parseFloat(num).toFixed(2);
+    }
+}

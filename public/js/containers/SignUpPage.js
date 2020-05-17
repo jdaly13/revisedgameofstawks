@@ -49,7 +49,6 @@ class SignUpPage extends React.Component {
       const errors = e.errors ? e.errors : {};
     }
 
-    
   }
 
   /**
