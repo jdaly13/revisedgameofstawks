@@ -4,14 +4,9 @@ import dataSource from '../services/dataSource';
 import UserProfile from '../components/Dashboard.js';
 import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
+import configuration from '../services/constants';
+import { utilityFunctions } from '../modules/utilities';
 
-var utilityFunctions = (function() {
-  return {
-    toFixed: function(num) {
-      return +parseFloat(num).toFixed(2);
-    }
-  };
-})();
 class DashboardPage extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -20,51 +15,36 @@ class DashboardPage extends React.Component {
       data: '',
       currentPortfolio: null,
       currentPrice: null,
-      auth:true
+      auth:true,
+      token: Auth.getToken(),
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
-    this.request = this.request.bind(this);
-  }
-
-  request(url) {
-    return new Promise((res, rej) => {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
-      xhr.open('GET', url);
-      xhr.onload = () => {
-        res(xhr.response);
-      };
-      xhr.onerror = rej;
-      xhr.send();
-    })
 
   }
 
   getCurrentPrices() {
-    const url = "https://cloud.iexapis.com/stable/tops/last?token=pk_4d0cd52a44c5411494f5868302139b73&symbols="
+    const url = configuration.stockUrl;
     let str = ''
     const {currentPortfolio} = this.state;
     if (!currentPortfolio.length) return; // no need to make call if no portfolio
     currentPortfolio.forEach((obj, index, arr) => {
-      var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol;
+      var symbol = obj.symbol = (obj.symbol === 'ssri') ? 'ssrm' : obj.symbol; //remove this hack
       this.symbols[symbol] = Object.assign({}, obj);
       str += !arr[index + 1] ? symbol : (symbol + ',');
     });
     const finalUrl = url + str;
-    console.log(finalUrl, str);
 
-    return this.request(finalUrl).then((res) => {
-      console.log(res);
-      var notRegistered = false;
+    return dataSource.getStockData(finalUrl).then((res) => {
+      var totalGainOrLoss = 0;
       res.forEach((obj) => {
         var currentPrice = obj.price;
         var currentValue;
         var gainOrLoss;
         var symbol = obj.symbol.toLowerCase();
         var noOfShares = this.symbols[symbol] && this.symbols[symbol].noOfShares;
+        console.log('noofshares', this.symbols[symbol])
         if (!noOfShares) {
-          notRegistered = true;
           console.log(symbol);
         } else {
           currentValue = currentPrice * noOfShares;
@@ -75,32 +55,37 @@ class DashboardPage extends React.Component {
           let index = portfolioCopy.findIndex((copy) => {
             return copy.symbol === symbol;
           });
+          totalGainOrLoss += gainOrLoss;
           portfolioCopy[index] = Object.assign({}, portfolioCopy[index], {currentPrice, currentValue, gainOrLoss})
           this.setState({
             currentPortfolio: portfolioCopy
           })
         }
+      });
+
+      var portfolioVal = this.state.data.totalInvestedAmount + totalGainOrLoss;
+      var netBlnce = this.state.data.availableBalance + totalGainOrLoss;
+      this.setState({
+        data: Object.assign({}, this.state.data, {gainOrLoss: totalGainOrLoss, portfolioValue: portfolioVal, netBalance: netBlnce})
       })
     }).catch((err) => {
       console.warn(err);
     })
   }
-
-  /**
-   * This method will be executed after initial rendering.
-   */
+  
   async componentDidMount() {
-    if (this.props.info) {
+    if (this.props.location.state) {
       this.setState({
-        data: this.props.info,
-        currentPortfolio: this.props.info.portfolio
+        data: this.props.location.state,
+        currentPortfolio: this.props.location.state.portfolio
       }, this.getCurrentPrices);
 
     } else {
-      const token = Auth.getToken(); 
+      const { token } = this.state
       if (token) {
         try {
           const response = await dataSource.getUserData(token);
+          console.log(response);
           this.setState({
             data: response.data,
             secretData: response.message,
@@ -135,7 +120,7 @@ class DashboardPage extends React.Component {
             data={this.state.data}
             portfolio={this.state.currentPortfolio}
           />
-          <PurchaseEquitiesContainer />
+          <PurchaseEquitiesContainer token={this.state.token} />
         </div>
       );
     } else {

@@ -9,6 +9,12 @@ const dataSource = {
      },
      createUser(formData) {
         return fetchContent('POST', '/auth/signup', null, 'application/x-www-form-urlencoded', formData )
+     },
+     getStockData(url) {
+        return fetchContent('GET', url, null, 'application/json', null, true )
+     },
+     makePurchase(token, body) {
+        return fetchContent('POST', 'api/purchaseequities', token, 'application/json', body, false )
      }
 }
 

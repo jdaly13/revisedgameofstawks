@@ -6,11 +6,11 @@ function onSuccess (res, rej) {
     }  
 }
 function onFail (rej) {
-    rej(this.status);
+    rej(JSON.parse(this.responseText));
 }
 
 //AJAX FETCH
-export function fetchContent(method, url, token, contentType, formData) {
+export function fetchContent(method, url, token, contentType, formData, external) {
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -20,14 +20,25 @@ export function fetchContent(method, url, token, contentType, formData) {
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));
         xhr.setRequestHeader('Content-type', contentType);
         if (method === "POST") {
-            xhr.send(formData);
+            if (!token) { 
+                xhr.send(formData) 
+            } else {
+                xhr.setRequestHeader('Authorization', `bearer ${token}`);
+                xhr.send(formData);
+            }
         } else {
             //xhr.setRequestHeader('X-Token', token);
-            xhr.setRequestHeader('Authorization', `bearer ${token}`);
+            if (!external) {xhr.setRequestHeader('Authorization', `bearer ${token}`)};
             xhr.send();
         }
 
 
 
     })
+}
+
+export const utilityFunctions = {
+    toFixed: function(num) {
+        return +parseFloat(num).toFixed(2);
+    }
 }

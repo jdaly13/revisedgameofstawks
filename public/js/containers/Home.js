@@ -1,35 +1,24 @@
+/* NOT IN USE
 import React from 'react';
 import Auth from '../modules/Auth';
-import DashboardPage from './DashboardPage';
+import {withRouter} from 'react-router-dom';
 import LoginPage from './LoginPage';
 
 class HomeComponent extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            auth: false,
-            data: null
+        if (Auth.isUserAuthenticated()) {
+            this.props.history.push("/profile"+this.props.history.location.search)
         }
-    }
-
-    componentDidMount() {
-        this.setState({
-           auth:  Auth.isUserAuthenticated()
-        })
     }
 
     render() {
         return (
-            <React.Fragment>
-                {this.state.auth ? (
-                    <DashboardPage/>
-                ) : (
-                    <LoginPage />
-                )}
-            </React.Fragment>
+            <LoginPage />
         )
     }
 
 }
 
-export default HomeComponent;
+export default withRouter(HomeComponent);
+*/

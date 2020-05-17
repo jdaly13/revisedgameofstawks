@@ -1,0 +1,134 @@
+.modal_overlay{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    opacity: 1;
+    z-index: 9999;
+    padding: 1rem;
+    position: fixed;
+    animation: show .5s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal_container {
+    .login-container {
+        color:white;
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding-top:.5rem; /* CHANGE THIS */
+        }
+
+        .field-line {
+            width:100%;
+        }
+
+        button {
+            margin-left:auto;
+        }
+        p.error {
+            font-size:.8rem;
+            margin:0; /* CHANGE THIS */
+            padding:0; /* CHANGE THIS */
+        }
+
+        p.phrase {
+            width:100%;
+        }
+
+        h3 {
+            text-align: center;
+            width:100%;
+            margin-top:1.5rem; /* CHANGE THIS */
+        }
+
+        h4 {
+            font-size:1.2rem;
+        }
+
+        .cancel {
+            display: block;
+            align-self: center;
+            margin-left:auto;
+            text-transform: uppercase;
+            order:4;
+            text-align:center;
+            width:100%;
+            margin-top:1rem; /* CHANGE THIS */
+            @media #{$biggerThanPhone} {
+                order:0;
+                margin-top:0;
+                width:auto;
+            }
+        }
+
+    }
+
+}
+
+.editProfileWrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .editProfileContainer {
+    width:100%;
+    margin-bottom:2rem; /* CHANGE THIS */
+
+    @media #{$biggerThanPhone} {
+        width:45%;
+    }
+  }
+
+  .modal_close {
+    position: absolute;
+    right: 32px;
+    top: 32px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+    display: block;
+  }
+
+  .modal_close:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+  .modal_close:before, .modal_close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color:white;
+  }
+  .modal_close:before {
+    transform: rotate(45deg);
+  }
+  .modal_close:after {
+    transform: rotate(-45deg);
+  }
+
+  .modal_content {
+
+    .mvpd_modal_header {
+        font-family: AvenirNextLTProHeavy;
+        font-size:1.5rem;
+        color:white;
+    }
+
+    .mvpd_modal_message {
+        line-height: 1.29;
+        color:white;
+        width:100%;
+    }
+  }

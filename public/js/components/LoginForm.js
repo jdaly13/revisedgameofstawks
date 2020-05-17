@@ -1,3 +1,4 @@
+/* NOT IN USE
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Card, CardText } from 'material-ui/Card';
@@ -58,3 +59,4 @@ LoginForm.propTypes = {
 };
 
 export default LoginForm;
+*/

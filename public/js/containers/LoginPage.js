@@ -1,8 +1,9 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import Auth from '../modules/Auth';
 import SignIn from '../components/SignIn';
-import Dashboard from './DashboardPage';
 import dataSource from '../services/dataSource';
+//import LoginForm from '../components/LoginForm';
 
 
 class LoginPage extends React.Component {
@@ -44,10 +45,7 @@ class LoginPage extends React.Component {
       const response = await dataSource.authorizeUser(formData);
       if (response.success) {
         Auth.authenticateUser(response.token);
-        this.setState({
-          auth: true,
-          dbData: response.data.local
-        });
+        this.props.history.push("/profile"+this.props.history.location.search, response.data.local)
      } else {
        throw response;
      }
@@ -80,22 +78,16 @@ class LoginPage extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        {this.state.dbData ? (
-          <Dashboard info={this.state.dbData}/>
-        ) : (
-          <SignIn
-          onSubmit={this.processForm}
-          onChange={this.changeUser}
-          errors={this.state.errors}
-          successMessage={this.state.successMessage}
-          user={this.state.user}
-        />
-        )}
-      </React.Fragment>
+        <SignIn
+        onSubmit={this.processForm}
+        onChange={this.changeUser}
+        errors={this.state.errors}
+        successMessage={this.state.successMessage}
+        user={this.state.user}
+      />
     );
   }
 
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

@@ -77,7 +77,10 @@ function signup(body, res, next) {
         newUser.local.email = body.email;
         newUser.local.password = newUser.generateHash(body.password);
         newUser.local.startAmount = 100000.0;
-        newUser.local.total = 0;
+        newUser.local.availableBalance = newUser.local.startAmount;
+        newUser.local.totalInvestedAmount = 0;
+        newUser.local.gainOrLoss = 0;
+        newUser.local.portfolioValue = newUser.local.startAmount;
         var payload = {
           sub: newUser._id
         },

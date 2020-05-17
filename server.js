@@ -1,10 +1,11 @@
 var express = require('express');
 var path = require('path');
 var app = express();
-var port = process.env.PORT || 3099;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+require('dotenv').config({path: __dirname + '/.env'});
 
+var port = process.env.PORT || 3099;
 var configDBurl = require('./configuration/database.js').url;
 const mongoooseOptions = {
   useMongoClient: true,
@@ -13,8 +14,6 @@ const mongoooseOptions = {
   reconnectTries: 30
 };
 
-const DIST_DIR = __dirname;
-const HTML_FILE = path.join(DIST_DIR, 'index.html')
 
 // configuration ===============================================================
 mongoose.connect(configDBurl, mongoooseOptions);
@@ -22,8 +21,6 @@ mongoose.connect(configDBurl, mongoooseOptions);
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-//app.use(express.static('live'));
 
 
 //to use API to fetch user data
@@ -54,20 +51,13 @@ if (process.env.NODE_ENV === 'development' ) {
   });
   app.use(midWare);
   app.use(wpHotMiddleWare(compiler));
+} else { // production
+  app.use(express.static('dist'));
 }
-
-//app.use(express.static('public'));
 
 app.get('*', function(req, res, next) {
   res.sendFile(path.resolve(__dirname, "./dist/index.html"))
-  /*compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
-    if (err) {
-      return next(err)
-    }
-    res.set('content-type', 'text/html')
-    res.send(result)
-    res.end()
-    })*/
+
 });
 
 // launch ======================================================================
