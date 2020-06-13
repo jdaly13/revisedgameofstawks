@@ -8,6 +8,8 @@ class PurchaseEquitiesPage extends React.Component {
     super(props, context);
     // this.fetchStocks = this.fetchStocks.bind(this);
     this.getStockPrice = this.getStockPrice.bind(this);
+    this.makePurchase = this.makePurchase.bind(this);
+    this.makeSale = this.makeSale.bind(this);
     this.state = {};
     this.state.equitiesToPurchase = [];
     this.state.currentPurchase = {};
@@ -42,20 +44,49 @@ class PurchaseEquitiesPage extends React.Component {
   //   // });
   // }
 
-  getStockPrice(amount, symbol) {
+  getStockPrice(amount, symbol, buyorsell) {
     let url = configuration.stockUrl + symbol;
-    console.log(amount, this.props);
-    const success = (data) => {
+    console.log(amount, symbol, buyorsell, this.props);
+    const makePurchaseOrMakeSale = buyorsell === "purchase" ? this.makePurchase : this.makeSale;
+    dataSource.getStockData(url).then((res) => {
+      console.log('get stock price', res)
+      makePurchaseOrMakeSale(res, amount)
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
+  makePurchase(data, amount) {
       const resolution = data[0]
-      const objToSend = {symbol: resolution.symbol.toLowerCase(), price: resolution.price, noOfShares:amount, buyorsell:"buy", time: resolution.time};
+      const objToSend = {
+        symbol: resolution.symbol.toLowerCase(), 
+        price: resolution.price, 
+        noOfShares: amount, 
+        buyorsell:"buy", 
+        time: resolution.time
+      };
+      console.log(this.props, 'whatever');
       dataSource.makePurchase(this.props.token, JSON.stringify(objToSend)).then((res)=>{
         console.log('response', res);
       }).catch((err)=>{
         console.log('failure', err)
       })
-    }
-    dataSource.getStockData(url).then(success).catch((error) => {
-      console.log(error)
+  }
+
+  makeSale(data, amount) {
+    console.log(data);
+    const resolution = data[0]
+    const objToSend = {
+      symbol: resolution.symbol.toLowerCase(), 
+      price: resolution.price, 
+      noOfShares:amount, 
+      buyorsell:"sell", 
+      time: resolution.time
+    };
+    dataSource.makeSale(this.props.token, JSON.stringify(objToSend)).then((res)=>{
+      console.log('response', res);
+    }).catch((err)=>{
+      console.log('failure', err)
     })
   }
 
@@ -68,6 +99,7 @@ class PurchaseEquitiesPage extends React.Component {
         fetch={this.getStockPrice}
         toPurchase={this.state.equitiesToPurchase}
         currentPurchase={this.state.currentPurchase}
+        portfolio={this.props.portfolio}
       />
     );
   }

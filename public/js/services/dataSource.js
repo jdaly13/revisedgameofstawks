@@ -15,6 +15,9 @@ const dataSource = {
      },
      makePurchase(token, body) {
         return fetchContent('POST', 'api/purchaseequities', token, 'application/json', body, false )
+     },
+     makeSale(token, body) {
+        return fetchContent('POST', 'api/sellequities', token, 'application/json', body, false )
      }
 }
 

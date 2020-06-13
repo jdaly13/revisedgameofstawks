@@ -120,7 +120,7 @@ class DashboardPage extends React.Component {
             data={this.state.data}
             portfolio={this.state.currentPortfolio}
           />
-          <PurchaseEquitiesContainer token={this.state.token} />
+          <PurchaseEquitiesContainer portfolio={this.state.currentPortfolio} token={this.state.token} />
         </div>
       );
     } else {

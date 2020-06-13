@@ -33,6 +33,9 @@ function login(body, res, next) {
     if (!user.local.startAmount) {
       user.local.startAmount = 100000.0;
     }
+    if (!user.local.tokensProduced) {
+      user.local.tokensProduced = 0;
+    }
     user.local.availableBalance = !user.local.availableBalance
       ? user.local.startAmount
       : user.local.availableBalance;

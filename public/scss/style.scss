@@ -98,3 +98,26 @@ span {
 .mdc-text-field {
   width:100%;
 }
+
+/* BUY SELL CONTAINER */
+.buysell {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  h4 {
+    text-align: center;
+    width:100%;
+  }
+
+  > div {
+    width:50%;
+  }
+}
+
+.portfolio {
+  border: 1px solid black;
+  padding: 1rem;
+  margin: .5rem;
+}
