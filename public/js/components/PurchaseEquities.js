@@ -106,7 +106,8 @@ class PurchaseEquities extends React.Component {
             </button>
           </div>
         </div>
-        <div className="container sell">
+        {this.props.portfolio.length &&
+        <div className="container sell">     
           <h6>Sell</h6>
           <div className="content">
             <label>Choose stock symbol</label>
@@ -140,6 +141,7 @@ class PurchaseEquities extends React.Component {
             </button>
           </div>
         </div>
+        }
         {this.state.showModal &&
         <Modal onCloseRequest={this.handleToggleModal}>
           <h1>Confirmation of {this.state.buyorsell}</h1>

@@ -81,7 +81,8 @@ class PurchaseEquitiesPage extends React.Component {
       price: resolution.price, 
       noOfShares:amount, 
       buyorsell:"sell", 
-      time: resolution.time
+      time: resolution.time,
+      address: this.props.address
     };
     dataSource.makeSale(this.props.token, JSON.stringify(objToSend)).then((res)=>{
       console.log('response', res);

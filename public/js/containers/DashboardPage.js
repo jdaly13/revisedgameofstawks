@@ -6,6 +6,7 @@ import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 import configuration from '../services/constants';
 import { utilityFunctions } from '../modules/utilities';
+import { web3 } from '../ethereum/web3';
 
 class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -17,6 +18,7 @@ class DashboardPage extends React.Component {
       currentPrice: null,
       auth:true,
       token: Auth.getToken(),
+      etherAddress: null
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
@@ -70,11 +72,19 @@ class DashboardPage extends React.Component {
       })
     }).catch((err) => {
       console.warn(err);
+    }).then(async()=> {
+      await window.ethereum.send("eth_requestAccounts")
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
+      this.setState({
+        etherAddress: accounts[0] || null
+      })
     })
   }
   
   async componentDidMount() {
     if (this.props.location.state) {
+      console.log('dfdd', this.props.location.state);
       this.setState({
         data: this.props.location.state,
         currentPortfolio: this.props.location.state.portfolio
@@ -120,7 +130,10 @@ class DashboardPage extends React.Component {
             data={this.state.data}
             portfolio={this.state.currentPortfolio}
           />
-          <PurchaseEquitiesContainer portfolio={this.state.currentPortfolio} token={this.state.token} />
+          <PurchaseEquitiesContainer address={this.state.etherAddress} 
+            portfolio={this.state.currentPortfolio} 
+            token={this.state.token} 
+          />
         </div>
       );
     } else {

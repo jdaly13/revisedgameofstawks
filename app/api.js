@@ -1,4 +1,6 @@
 var User =    require('./models/user');
+
+var sendToken = require('./token');
 module.exports = function(express) {
   const router = new express.Router();
   router.get('/dashboard', (_req, res) => {
@@ -115,9 +117,10 @@ module.exports = function(express) {
     noOfShares = +parseFloat(req.body.noOfShares).toFixed(2),
     symbol = req.body.symbol,
     name = req.body.name || "Not Available Currently",
-    alreadyInPortfolio = false,
     sellAmount = price * noOfShares,
+    etherAddress = req.body.address,
     indexAndSellObj = false;
+    console.log('ether address', etherAddress);
     
     function sellAction (user) {
         var message = false,
@@ -148,7 +151,7 @@ module.exports = function(express) {
 
     }
 
-    User.findOne({ 'local.email' :  res.data.email}, function(err, user) {
+    User.findOne({ 'local.email' :  res.data.email}, async function(err, user) {
         const copied = JSON.parse(JSON.stringify(user.local));
         if (err) {
             return res.status(500).json({
@@ -165,41 +168,49 @@ module.exports = function(express) {
         }
 
         indexAndSellObj = sellAction(copied);
+        if (!indexAndSellObj) {
+            return res.status(400).json({
+                message: "Can't sell what you don't have"
+            })
+        }
         var existingIndex = indexAndSellObj[0];
         var sellObject = indexAndSellObj[1];
         if (!existingIndex) {
             return res.status(400).json({
                 message: "You don't have enough funds"
             })
-        } else {
-            var pershareavg = copied.portfolio[existingIndex].pershareavg;
-            var originalPurchaseAmountForShares = noOfShares * pershareavg; //only used for profit
-            var profitOrLoss = sellAmount - originalPurchaseAmountForShares;
-            copied.portfolio[existingIndex].noOfShares -= noOfShares;
-            sellObject.profitOrLoss = profitOrLoss;
-            console.log(profitOrLoss);
-            if (Math.sign(profitOrLoss) === 1) { //positive meaning profit
-                copied.portfolio[existingIndex].investedamount = copied.portfolio[existingIndex].noOfShares * pershareavg;
-                copied.totalInvestedAmount -= originalPurchaseAmountForShares;
-                copied.availableBalance += originalPurchaseAmountForShares;
-                //only for profit
-                copied.tokensProduced += profitOrLoss
-                
-            } else { //negative
-                copied.portfolio[existingIndex].investedamount -= sellAmount;
-                copied.totalInvestedAmount -= sellamount;
-                copied.availableBalance = copied.availableBalance + (sellAmount - Math.abs(profitOrLoss));
-                //only for loss
-                copied.portfolio[existingIndex].pershareavg = copied.portfolio[existingIndex].investedAmount / copied.portfolio[existingIndex].noOfShares; 
+        } 
+        
+        var pershareavg = copied.portfolio[existingIndex].pershareavg;
+        var originalPurchaseAmountForShares = noOfShares * pershareavg; //only used for profit
+        var profitOrLoss = sellAmount - originalPurchaseAmountForShares;
+        copied.portfolio[existingIndex].noOfShares -= noOfShares;
+        sellObject.profitOrLoss = profitOrLoss;
+        console.log(profitOrLoss);
+        if (Math.sign(profitOrLoss) === 1) { //positive meaning profit
+            copied.portfolio[existingIndex].investedamount = copied.portfolio[existingIndex].noOfShares * pershareavg;
+            copied.totalInvestedAmount -= originalPurchaseAmountForShares;
+            copied.availableBalance += originalPurchaseAmountForShares;
+            //only for profit
+            copied.tokensProduced += profitOrLoss
 
-
+            if (etherAddress) {
+                await sendToken(profitOrLoss, etherAddress);
             }
+            
+        } else { //negative
+            copied.portfolio[existingIndex].investedamount -= sellAmount;
+            copied.totalInvestedAmount -= sellamount;
+            copied.availableBalance = copied.availableBalance + (sellAmount - Math.abs(profitOrLoss));
+            //only for loss
+            copied.portfolio[existingIndex].pershareavg = copied.portfolio[existingIndex].investedAmount / copied.portfolio[existingIndex].noOfShares; 
 
-            copied.sells.push(sellObject);
 
-            console.log('copied obj', copied);
-            user.local = copied;
         }
+
+        copied.sells.push(sellObject);
+
+        user.local = copied;
 
         
         user.save(function(err) {
