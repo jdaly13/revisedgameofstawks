@@ -8,10 +8,11 @@ require('dotenv').config({path: __dirname + '/.env'});
 var port = process.env.PORT || 3099;
 var configDBurl = require('./configuration/database.js').url;
 const mongoooseOptions = {
-  useMongoClient: true,
   socketTimeoutMS: 0,
   keepAlive: true,
-  reconnectTries: 30
+  //reconnectTries: 30,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 };
 
 

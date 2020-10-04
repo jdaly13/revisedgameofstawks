@@ -22,6 +22,7 @@ class DashboardPage extends React.Component {
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
+    this.update = this.update.bind(this);
 
   }
 
@@ -81,6 +82,13 @@ class DashboardPage extends React.Component {
       })
     })
   }
+
+  update(updatedData) {
+    this.setState({
+      data: updatedData,
+      currentPortfolio: updatedData.portfolio
+    }, this.getCurrentPrices);
+  }
   
   async componentDidMount() {
     if (this.props.location.state) {
@@ -132,7 +140,8 @@ class DashboardPage extends React.Component {
           />
           <PurchaseEquitiesContainer address={this.state.etherAddress} 
             portfolio={this.state.currentPortfolio} 
-            token={this.state.token} 
+            token={this.state.token}
+            update={this.update} 
           />
         </div>
       );

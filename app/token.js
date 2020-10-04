@@ -3,7 +3,6 @@ let Web3 = require('web3');
 
 var token = require('../compiled-token.json');
 //var port = process.env.PORT || 3099;
-console.log('tokensdfsdfs', token)
 
 module.exports = async function sendToken(amount, address) {
 

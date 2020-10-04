@@ -62,12 +62,13 @@ class PurchaseEquitiesPage extends React.Component {
         symbol: resolution.symbol.toLowerCase(), 
         price: resolution.price, 
         noOfShares: amount, 
-        buyorsell:"buy", 
         time: resolution.time
       };
       console.log(this.props, 'whatever');
       dataSource.makePurchase(this.props.token, JSON.stringify(objToSend)).then((res)=>{
         console.log('response', res);
+        this.props.update(res.data)
+
       }).catch((err)=>{
         console.log('failure', err)
       })
@@ -80,12 +81,12 @@ class PurchaseEquitiesPage extends React.Component {
       symbol: resolution.symbol.toLowerCase(), 
       price: resolution.price, 
       noOfShares:amount, 
-      buyorsell:"sell", 
       time: resolution.time,
       address: this.props.address
     };
     dataSource.makeSale(this.props.token, JSON.stringify(objToSend)).then((res)=>{
       console.log('response', res);
+      this.props.update(res.data)
     }).catch((err)=>{
       console.log('failure', err)
     })

@@ -1,19 +1,18 @@
 var User =    require('./models/user');
-
 var sendToken = require('./token');
+
 module.exports = function(express) {
   const router = new express.Router();
   router.get('/dashboard', (_req, res) => {
     const data = res.data;
     res.status(200).json({
       message: res.data.email,
-      data: res.data
+      data
     });
   });
 
   router.post('/purchaseequities', (req, res, done) => {
-    var action = req.body.buyorsell,
-        price = +parseFloat(req.body.price).toFixed(2),
+        var price = +parseFloat(req.body.price).toFixed(2),
         noOfShares = +parseFloat(req.body.noOfShares).toFixed(2),
         symbol = req.body.symbol,
         name = req.body.name || "Not Available Currently",
@@ -37,10 +36,9 @@ module.exports = function(express) {
     }
 
     User.findOne({ 'local.email' :  res.data.email}, function(err, user) {
-        // if there are any errors, return the error before anything else
-        var obj = {};
-
+        // deep copy
         const copied = JSON.parse(JSON.stringify(user.local));
+        // if there are any errors, return the error before anything else
         if (err)
             return res.status(500).json({
                 message: "service unavailable",
@@ -103,10 +101,8 @@ module.exports = function(express) {
                
             return res.status(200).json({
                 success:true,
-                portfolio: (action === 'buy') ? (!alreadyInPortfolio) ? pushObject : user.local.portfolio[existingIndex] : user.local.portfolio[existingIndex],
                 id: symbol,
-                availableBalance: user.local.availableBalance,
-                netBalance: user.local.netBalance,
+                data: user.local
             });
         });
     });
@@ -222,12 +218,8 @@ module.exports = function(express) {
                
             return res.status(200).json({
                 success:true,
-                portfolio: user.local.portfolio,
                 id: symbol,
-                availableBalance: user.local.availableBalance,
-                totalInvestedAmount: user.local.totalInvestedAmount,
-                tokensProduced: user.local.tokensProduced,
-                local: user.local
+                data: user.local
             });
         });
     });
