@@ -1,6 +1,6 @@
 require('dotenv').config({path: __dirname + '../.env'});
-const HDWalletProvider = require('@truffle/hdwallet-provider');
 let Web3 = require('web3');
+var HDWalletProvider = require('@truffle/hdwallet-provider');
 
 var token = require('../compiled-token.json');
 
