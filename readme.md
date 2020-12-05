@@ -49,7 +49,9 @@ heroku local web
 ```  
 
 ## MORE RESOURCES  
-https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment
+https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment  
+
+https://git.heroku.com/game-of-stawks.git
 
 
 ### BUGS  
@@ -113,6 +115,7 @@ ask question on ethere stack exchannge in order to use infura I need to provide 
 then  
 `await web3.eth.getAccounts()`
  `await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')`
+
 
 
 
