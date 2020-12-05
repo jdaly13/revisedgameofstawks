@@ -6,7 +6,7 @@ import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 import configuration from '../services/constants';
 import { utilityFunctions } from '../modules/utilities';
-import { web3 } from '../ethereum/web3';
+// import { web3 } from '../ethereum/web3';
 
 class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -23,6 +23,7 @@ class DashboardPage extends React.Component {
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
     this.update = this.update.bind(this);
+    this.connectEthereum = this.connectEthereum.bind(this);
 
   }
 
@@ -73,15 +74,20 @@ class DashboardPage extends React.Component {
       })
     }).catch((err) => {
       console.warn(err);
-    }).then(async()=> {
-      await window.ethereum.send("eth_requestAccounts")
-      const accounts = await web3.eth.getAccounts();
-      console.log(accounts);
+    })
+  }
+
+  async connectEthereum() {
+    if (window.ethereum) {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('accoutns', accounts);
       this.setState({
         etherAddress: accounts[0] || null
       })
-    })
-  }
+    } else {
+      window.alert('Please install metamask extension so you can earn tokens');
+    }
+ } 
 
   update(updatedData) {
     this.setState({
@@ -141,7 +147,8 @@ class DashboardPage extends React.Component {
           <PurchaseEquitiesContainer address={this.state.etherAddress} 
             portfolio={this.state.currentPortfolio} 
             token={this.state.token}
-            update={this.update} 
+            update={this.update}
+            connectEthereum={this.connectEthereum}
           />
         </div>
       );

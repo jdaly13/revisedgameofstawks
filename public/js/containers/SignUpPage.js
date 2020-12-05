@@ -3,6 +3,7 @@ import {withRouter} from 'react-router-dom';
 import SignUpForm from '../components/SignUpForm.js';
 import dataSource from '../services/dataSource';
 import Auth from '../modules/Auth';
+import {changeUser} from '../services/utils'
 
 
 class SignUpPage extends React.Component {
@@ -22,7 +23,7 @@ class SignUpPage extends React.Component {
     };
 
     this.processForm = this.processForm.bind(this);
-    this.changeUser = this.changeUser.bind(this);
+    this.changeUser = changeUser.bind(this);
   }
 
   /**
@@ -51,20 +52,6 @@ class SignUpPage extends React.Component {
 
   }
 
-  /**
-   * Change the user object.
-   *
-   * @param {object} event - the JavaScript event object
-   */
-  changeUser(event) {
-    const field = event.target.name;
-    const user = this.state.user;
-    user[field] = event.target.value;
-
-    this.setState({
-      user
-    });
-  }
 
   /**
    * Render the component.

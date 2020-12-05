@@ -27,8 +27,8 @@ https://cloud.iexapis.com11
 
 ## DEPLOY TO HEROKU  
 https://devcenter.heroku.com/changelog-items/1557  - will run build script automatically   
-if deploying another branch  
 
+if deploying another branch  
 ```
 git push heroku startRefactor:master
 ``` 
@@ -73,9 +73,7 @@ STEPS For creating a development environment for GOS Token
 STEPS For creating a development environment  
 1. make sure you have a network available! Start ganache application with quickstart ethereum network, go to account and copy an address into clipboard (best to copy 3rd or 4th)  
 2. make sure you have truffle cli installed and make sure ganache is configured in config file, now it is time to compile and deploy our solidity contracts to abi  
-```
-truffle migrate --network ganache --reset
-```
+```truffle migrate --network ganache --reset```
 3. when compiling and deployment is complete
 check in ganache that contract was deployed you should see
 the address of the contract under transactions tab look for contract created - check addresss and copy it to an empty document you'll need this later to paste into UI  
@@ -101,11 +99,21 @@ this will take the json from the build file strip out what's not needed and copy
 `npm run buildDev`
 
 
+TO DO Keep track of balances in smart contract for each user (in progress)
+before making sale warn them about connecting to ethereum
+
+deploy to heroku
+deploy to goerli using geth
 
 
-TO DO Migrate mlabl to mongo DB
-https://account.mongodb.com/account/login
-https://docs.mlab.com/how-to-migrate-to-atlas/#using-mongodump-mongorestore
+alert user if tokenSendSuccess is true to see if user received gost tokens when they sold stonks - alert on each sale/withdraw
+ask question on ethere stack exchannge in order to use infura I need to provide nmenmonic to 
+
+`npx truffle console --network ropsten`  
+then  
+`await web3.eth.getAccounts()`
+ `await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')`
+
 
 
 

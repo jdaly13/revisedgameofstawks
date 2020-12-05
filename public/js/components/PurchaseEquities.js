@@ -7,10 +7,13 @@ class PurchaseEquities extends React.Component {
     super(props);
     this.state = {
       showModal: false,
-      error: null,
+      purchaseError:'',
+      withdrawError:'',
       buyorsell: null,
       shareAmount: null,
-      shareSymbol: null
+      shareSymbol: null,
+      purchaseOrSaleSuccess: '',
+      loading:false,
     };
     this.sharesToPurchase = 0;
     this.sharesToSell = 0;
@@ -25,12 +28,12 @@ class PurchaseEquities extends React.Component {
     this.portfolioExists = !!this.props.portfolio.length;
     this.purchaseWithdraw = {
       purchase: 'purchase',
-      widthdraw: 'withdraw'
+      withdraw: 'withdraw'
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+    // console.log('nextprops' , nextProps);
     //this.portfolio = nextProps.portfolio;
   }
 
@@ -47,30 +50,57 @@ class PurchaseEquities extends React.Component {
   }
 
   checkValues(event) {
-    var obj = this.getShareAmountandShareSymbol(event.target.id);
-    console.log(obj);
+    this.setState({purchaseError:'', withdrawError: ''})
+    var object = this.getShareAmountandShareSymbol(event.target.id);
+    if (this.purchaseWithdraw.withdrawError === event.target.id ) {
+      const inPortfolio = this.props.portfolio.some((obj)=> {
+        return obj.symbol === object.shareSymbol
+      });
+      if (!inPortfolio) {
+        this.setState({
+          withdrawError: "You can't sell equities you don't own"
+        })
+        return false;
+      }
+    }
     this.setState({
       buyorsell: this.purchaseWithdraw[event.target.id],
-      shareAmount: obj.shareAmount,
-      shareSymbol: obj.shareSymbol
+      shareAmount: object.shareAmount,
+      shareSymbol: object.shareSymbol
     })
-    if (obj.shareAmount > 0 && Number(obj.shareAmount) && obj.shareSymbol) {
+    if (object.shareAmount > 0 && Number(object.shareAmount) && object.shareSymbol) {
       this.handleToggleModal();
     } else {
       this.setState({
-        error: "You need to put a valid sharesymbol and amount of shares"
+        purchaseError: "You need to put a valid sharesymbol and amount of shares"
       })
     }
   }
 
   getValuesandFetch() {
-    this.props.fetch(this.state.shareAmount, this.state.shareSymbol, this.state.buyorsell);
-    this.handleToggleModal();
+    this.setState({
+      loading:true
+    })
+    return this.props.getStockPrice(this.state.shareAmount, this.state.shareSymbol, this.state.buyorsell).then((res)=> {
+      this.setState({
+        purchaseOrSaleSuccess: true,
+        message: "Congratulations",
+        loading: false,
+      });
+    }).catch((err) => {
+      this.setState({
+        purchaseOrSaleSuccess: false,
+        message: err.message,
+        loading: false,
+      })
+    });
   }
 
   render() {
     return (
       <section className="buysell">
+        <button className="enableEthereumButton" onClick={this.props.connectEthereum}>ENABLE ETHEREUM TO RECEIVE TOKENS WHEN YOU SELL</button>
+        {this.props.address && <h4 style={{color:"blue"}}>You are connnected with address {this.props.address} </h4>}
         <h4>Time to Buy {this.portfolioExists && 'or sell'} some stawks</h4>
         <div className="container buy">
           <h6>Purchase</h6>
@@ -95,7 +125,7 @@ class PurchaseEquities extends React.Component {
             />
           </div>
           <div className="content">
-          {this.state.error && <div style={{color:"red"}}>{this.state.error}</div>}
+          {this.state.purchaseError && <div style={{color:"red"}}>{this.state.purchaseError}</div>}
             <button
               className="submit"
               onClick={this.checkValues}
@@ -130,12 +160,12 @@ class PurchaseEquities extends React.Component {
             />
           </div>
           <div className="content">
-          {this.state.error && <div style={{color:"red"}}>{this.state.error}</div>}
+          {this.state.withdrawError && <div style={{color:"red"}}>{this.state.withdrawError}</div>}
             <button
               className="submit"
               onClick={this.checkValues}
               type="submit"
-              id="widthdraw"
+              id="withdraw"
             >
               Submit
             </button>
@@ -146,8 +176,21 @@ class PurchaseEquities extends React.Component {
         <Modal onCloseRequest={this.handleToggleModal}>
           <h1>Confirmation of {this.state.buyorsell}</h1>
           <p>You are about to {this.state.buyorsell} {this.state.shareAmount} shares of {this.state.shareSymbol} </p>
-          <div><button onClick={this.getValuesandFetch}>confirm</button></div>
-          <div><button onClick={this.handleToggleModal}>cancel</button></div>
+          {typeof this.state.purchaseOrSaleSuccess !== "boolean" && (
+          <>
+            <div><button onClick={this.getValuesandFetch}>confirm</button></div>
+            <div><button onClick={this.handleToggleModal}>cancel</button></div>
+          </>
+          )}
+          {this.state.loading && <div>LOADING ... Please wait</div>}
+          {typeof this.state.purchaseOrSaleSuccess === "boolean" && (
+            <div>
+              <h4>
+                Your {this.state.buyorsell} was a {this.state.purchaseOrSaleSuccess ? "Success" : "Failure"}
+              </h4>
+              <p>{this.state.message}</p>
+            </div>
+          )}
         </Modal> 
         }
       </section>

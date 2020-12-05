@@ -4,6 +4,7 @@ import Auth from '../modules/Auth';
 import SignIn from '../components/SignIn';
 import dataSource from '../services/dataSource';
 //import LoginForm from '../components/LoginForm';
+import {changeUser} from '../services/utils'
 
 
 class LoginPage extends React.Component {
@@ -28,7 +29,7 @@ class LoginPage extends React.Component {
       dbData: null
     };
     this.processForm = this.processForm.bind(this);
-    this.changeUser = this.changeUser.bind(this);
+    this.changeUser = changeUser.bind(this);
   }
 
 
@@ -66,15 +67,15 @@ class LoginPage extends React.Component {
    *
    * @param {object} event - the JavaScript event object
    */
-  changeUser(event) {
-    const field = event.target.name;
-    const user = this.state.user;
-    user[field] = event.target.value;
+  // changeUser(event) {
+  //   const field = event.target.name;
+  //   const user = this.state.user;
+  //   user[field] = event.target.value;
 
-    this.setState({
-      user
-    });
-  }
+  //   this.setState({
+  //     user
+  //   });
+  // }
 
   render() {
     return (

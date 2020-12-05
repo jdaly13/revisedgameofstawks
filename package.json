@@ -8,6 +8,7 @@
     "dev": "webpack && node server.js",
     "development": "NODE_ENV=development node server.js",
     "buildDev": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=development node server.js",
+    "buildDevRopsten": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=ropsten node server.js",
     "buildDevWindows": "webpack --config webpack.dev.config.js && set NODE_ENV=development&& node server.js",
     "start": "node server.js",
     "build": "webpack"
@@ -26,6 +27,7 @@
     "@babel/core": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@truffle/hdwallet-provider": "^1.2.0",
     "babel-loader": "^8.0.2",
     "css-loader": "^0.27.3",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -46,6 +48,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "@material/react-text-field": "^0.15.0",
+    "@openzeppelin/contracts": "^3.2.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "1.19.0",
     "dotenv": "^8.2.0",

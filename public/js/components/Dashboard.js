@@ -57,6 +57,23 @@ class UserProfile extends React.Component {
     );
   }
 
+  getTokensProduced() {
+    return this.data && this.data.tokensProduced;
+  }
+
+  getTokensReceived() {
+    const tokenReceivedString = "Total amount of tokens received "
+    if (this.data && this.data.tokensGivenAndReceived.length) {
+      let total= 0;
+      this.data.tokensGivenAndReceived.forEach((obj) => {
+        console.log(obj)
+        total += obj.amount;
+      });
+      return tokenReceivedString + total;
+    }
+    return '';
+  }
+
   getPortfolio() {
     return this.portfolio.map((obj, index) => (
       <div className="portfolio" key={obj._id} id={obj.symbol}>
@@ -72,6 +89,8 @@ class UserProfile extends React.Component {
         </span>
         <span> The current value of your stock is {obj.currentValue} </span>
         <span> Your current gain or loss is {obj.gainOrLoss} </span>
+        <span> Tokens that have been produced {this.getTokensProduced()}</span>
+        <span> {this.getTokensReceived()}</span>
       </div>
     ));
   }

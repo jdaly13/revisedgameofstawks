@@ -83,7 +83,6 @@ module.exports = function(express) {
                     }
                    copied.portfolio.push(pushObject);
                 }
-                console.log('copied obj', copied);
             //   obj = findoutGainOrLossNetBalanceAndPortfolioValue(copied.portfolio, copied.totalInvestedAmount, copied.availableBalance);
             //   copied.gainOrLoss = obj.gainOrLoss;
             //   copied.netBalance = obj.netBalance;
@@ -117,6 +116,8 @@ module.exports = function(express) {
     etherAddress = req.body.address,
     indexAndSellObj = false;
     console.log('ether address', etherAddress);
+
+    let tokenSendSuccess = false;
     
     function sellAction (user) {
         var message = false,
@@ -148,7 +149,6 @@ module.exports = function(express) {
     }
 
     User.findOne({ 'local.email' :  res.data.email}, async function(err, user) {
-        const copied = JSON.parse(JSON.stringify(user.local));
         if (err) {
             return res.status(500).json({
                 message: "service unavailable",
@@ -162,6 +162,7 @@ module.exports = function(express) {
                 message: "user not found"
             });
         }
+        const copied = JSON.parse(JSON.stringify(user.local));
 
         indexAndSellObj = sellAction(copied);
         if (!indexAndSellObj) {
@@ -171,7 +172,7 @@ module.exports = function(express) {
         }
         var existingIndex = indexAndSellObj[0];
         var sellObject = indexAndSellObj[1];
-        if (!existingIndex) {
+        if (typeof(existingIndex) !== "number") {
             return res.status(400).json({
                 message: "You don't have enough funds"
             })
@@ -182,7 +183,6 @@ module.exports = function(express) {
         var profitOrLoss = sellAmount - originalPurchaseAmountForShares;
         copied.portfolio[existingIndex].noOfShares -= noOfShares;
         sellObject.profitOrLoss = profitOrLoss;
-        console.log(profitOrLoss);
         if (Math.sign(profitOrLoss) === 1) { //positive meaning profit
             copied.portfolio[existingIndex].investedamount = copied.portfolio[existingIndex].noOfShares * pershareavg;
             copied.totalInvestedAmount -= originalPurchaseAmountForShares;
@@ -190,9 +190,18 @@ module.exports = function(express) {
             //only for profit
             copied.tokensProduced += profitOrLoss
 
-            if (etherAddress) {
-                await sendToken(profitOrLoss, etherAddress);
+            try {
+                const response = await sendToken(profitOrLoss, etherAddress);
+                tokenSendSuccess = true;
+            } catch(err) { //no ether address or transaction did not complete
+                console.log(err);
             }
+            const arrayToPush = tokenSendSuccess ? copied.tokensGivenAndReceived : copied.tokensGivenAndRejected;
+            arrayToPush.push({
+                symbol: symbol,
+                address: etherAddress,
+                amount: profitOrLoss
+            });
             
         } else { //negative
             copied.portfolio[existingIndex].investedamount -= sellAmount;
@@ -208,18 +217,18 @@ module.exports = function(express) {
 
         user.local = copied;
 
-        
         user.save(function(err) {
             if (err) {
+                console.warn('error', err);
                 return res.status(500).json({
                     error:err
                 })
             }
-               
             return res.status(200).json({
                 success:true,
                 id: symbol,
-                data: user.local
+                data: user.local,
+                tokenSendSuccess: tokenSendSuccess
             });
         });
     });

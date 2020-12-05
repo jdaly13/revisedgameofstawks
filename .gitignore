@@ -231,3 +231,6 @@ bower_components/
 bundleAnalyzerReport.html
 
 backupmongo.json
+
+accounts.txt
+backupmongousers.json

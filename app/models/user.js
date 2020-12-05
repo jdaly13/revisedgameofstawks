@@ -42,6 +42,16 @@ var userSchema = mongoose.Schema({
             sellprice: Number,
             sellamount: Number,
             profitOrLoss: Number
+        }],
+        tokensGivenAndReceived: [{
+            amount: Number,
+            address: String,
+            symbol: String   
+        }],
+        tokensGivenAndRejected: [{
+            amount: Number,
+            address: String,
+            symbol: String 
         }]
     }
 });
