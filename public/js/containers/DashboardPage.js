@@ -6,6 +6,7 @@ import LoginPage from './LoginPage';
 import PurchaseEquitiesContainer from './PurchaseEquitiesPage';
 import configuration from '../services/constants';
 import { utilityFunctions } from '../modules/utilities';
+// import { web3 } from '../ethereum/web3';
 
 class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -17,9 +18,12 @@ class DashboardPage extends React.Component {
       currentPrice: null,
       auth:true,
       token: Auth.getToken(),
+      etherAddress: null
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
+    this.update = this.update.bind(this);
+    this.connectEthereum = this.connectEthereum.bind(this);
 
   }
 
@@ -72,9 +76,29 @@ class DashboardPage extends React.Component {
       console.warn(err);
     })
   }
+
+  async connectEthereum() {
+    if (window.ethereum) {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('accoutns', accounts);
+      this.setState({
+        etherAddress: accounts[0] || null
+      })
+    } else {
+      window.alert('Please install metamask extension so you can earn tokens');
+    }
+ } 
+
+  update(updatedData) {
+    this.setState({
+      data: updatedData,
+      currentPortfolio: updatedData.portfolio
+    }, this.getCurrentPrices);
+  }
   
   async componentDidMount() {
     if (this.props.location.state) {
+      console.log('dfdd', this.props.location.state);
       this.setState({
         data: this.props.location.state,
         currentPortfolio: this.props.location.state.portfolio
@@ -120,7 +144,12 @@ class DashboardPage extends React.Component {
             data={this.state.data}
             portfolio={this.state.currentPortfolio}
           />
-          <PurchaseEquitiesContainer token={this.state.token} />
+          <PurchaseEquitiesContainer address={this.state.etherAddress} 
+            portfolio={this.state.currentPortfolio} 
+            token={this.state.token}
+            update={this.update}
+            connectEthereum={this.connectEthereum}
+          />
         </div>
       );
     } else {

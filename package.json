@@ -8,9 +8,10 @@
     "dev": "webpack && node server.js",
     "development": "NODE_ENV=development node server.js",
     "buildDev": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=development node server.js",
+    "buildDevRopsten": "rm -rf dist && webpack --config webpack.dev.config.js && NODE_ENV=ropsten node server.js",
     "buildDevWindows": "webpack --config webpack.dev.config.js && set NODE_ENV=development&& node server.js",
     "start": "node server.js",
-    "build": "webpack" 
+    "build": "webpack"
   },
   "keywords": [
     "stocks",
@@ -46,22 +47,20 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "@material/react-text-field": "^0.15.0",
-    "async": "^2.3.0",
+    "@openzeppelin/contracts": "^3.2.0",
+    "@truffle/hdwallet-provider": "^1.2.0",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.17.1",
-    "browserify": "^14.3.0",
+    "body-parser": "1.19.0",
     "dotenv": "^8.2.0",
-    "ejs": "^2.5.6",
-    "express": "^4.15.2",
-    "jsonwebtoken": "^7.3.0",
-    "mongoose": "^4.9.3",
+    "express": "4.17.1",
+    "jsonwebtoken": "8.5.1",
+    "mongoose": "5.10.6",
     "nodemailer": "^4.0.0",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
+    "pify": "^5.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
-    "react-tap-event-plugin": "^2.0.1",
-    "validator": "^7.0.0"
+    "validator": "^7.0.0",
+    "web3": "^1.2.7"
   }
 }

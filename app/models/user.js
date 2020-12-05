@@ -15,6 +15,7 @@ var userSchema = mongoose.Schema({
         resetPasswordExpires: Date,
         startAmount: Number,
         totalInvestedAmount: Number,
+        tokensProduced: Number, 
         // netBalance: Number,
         // gainOrLoss: Number,
         availableBalance: Number,
@@ -39,7 +40,18 @@ var userSchema = mongoose.Schema({
             name: String,
             noOfShares: Number,
             sellprice: Number,
-            sellamount: Number
+            sellamount: Number,
+            profitOrLoss: Number
+        }],
+        tokensGivenAndReceived: [{
+            amount: Number,
+            address: String,
+            symbol: String   
+        }],
+        tokensGivenAndRejected: [{
+            amount: Number,
+            address: String,
+            symbol: String 
         }]
     }
 });

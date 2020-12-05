@@ -1,6 +1,6 @@
 'use strict';
 var jwt = require('jsonwebtoken');
-var User =    require('../app/models/user');
+var User =   require('../app/models/user');
 var config = require('./configauth');
 
 

@@ -53,20 +53,30 @@ class UserProfile extends React.Component {
         <h3>
           Your gain loss: <span>{this.data.gainOrLoss} </span> 
         </h3>
-        {/* <h3>
-          Your net balance: <span>{this.data.netBalance}</span> 
-        </h3> */}
-        {/* <h3>
-          {' '}
-          Your portfolio Value: <span> {this.data.portfolioValue} </span>
-        </h3> */}
       </div>
     );
   }
 
+  getTokensProduced() {
+    return this.data && this.data.tokensProduced;
+  }
+
+  getTokensReceived() {
+    const tokenReceivedString = "Total amount of tokens received "
+    if (this.data && this.data.tokensGivenAndReceived.length) {
+      let total= 0;
+      this.data.tokensGivenAndReceived.forEach((obj) => {
+        console.log(obj)
+        total += obj.amount;
+      });
+      return tokenReceivedString + total;
+    }
+    return '';
+  }
+
   getPortfolio() {
     return this.portfolio.map((obj, index) => (
-      <div key={obj._id} id={obj.symbol}>
+      <div className="portfolio" key={obj._id} id={obj.symbol}>
         <span>
           You have {obj.noOfShares} shares of {obj.name === "Not Available Currently" ? obj.symbol : obj.name}
         </span>
@@ -79,6 +89,8 @@ class UserProfile extends React.Component {
         </span>
         <span> The current value of your stock is {obj.currentValue} </span>
         <span> Your current gain or loss is {obj.gainOrLoss} </span>
+        <span> Tokens that have been produced {this.getTokensProduced()}</span>
+        <span> {this.getTokensReceived()}</span>
       </div>
     ));
   }
@@ -89,7 +101,7 @@ class UserProfile extends React.Component {
         <Header/>
         {this.getDashBoard()}
         {this.getHeadings()}
-        {this.portfolio.length && (
+        {!!this.portfolio.length && (
           <div>
             {this.getTitle()}
             {this.getPortfolio()}

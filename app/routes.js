@@ -1,3 +1,13 @@
+/* 
+############################
+############################
+############################
+FILE NOT IN USE CURRENTLY
+############################
+############################
+############################ 
+*/
+
 // app/routes.js
 //'use strict';
 //var User = require('../app/models/user');
@@ -11,7 +21,7 @@ module.exports = function(app) {
     //res.sendFile(path.join(__dirname, '../public', 'index.html'));
   });
 };
-/*
+
 module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
 
     // =====================================
@@ -303,4 +313,3 @@ module.exports = function(app, jwt, crypto, asynx, nodemailer, express ) {
 
 
 };
-*/

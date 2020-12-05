@@ -4,8 +4,8 @@ const dataSource = {
     authorizeUser(formData) { //login user returns success or not and user uuID
         return fetchContent('POST', `/auth/login`, null, 'application/x-www-form-urlencoded',formData );
      },
-     getUserData(token) {
-         return fetchContent('GET', '/api/dashboard', token, 'application/x-www-form-urlencoded', null )
+     getUserData(jwtToken) {
+         return fetchContent('GET', '/api/dashboard', jwtToken, 'application/x-www-form-urlencoded', null )
      },
      createUser(formData) {
         return fetchContent('POST', '/auth/signup', null, 'application/x-www-form-urlencoded', formData )
@@ -13,8 +13,14 @@ const dataSource = {
      getStockData(url) {
         return fetchContent('GET', url, null, 'application/json', null, true )
      },
-     makePurchase(token, body) {
-        return fetchContent('POST', 'api/purchaseequities', token, 'application/json', body, false )
+     makePurchase(jwtToken, body) {
+        return fetchContent('POST', 'api/purchaseequities', jwtToken, 'application/json', body, false )
+     },
+     makeSale(jwtToken, body) {
+        return fetchContent('POST', 'api/sellequities', jwtToken, 'application/json', body, false )
+     },
+     checkGOSTtoken(jwtToken, body) {
+        return fetchContent('GET', 'api/getTokenInfo', jwtToken, 'application/json', body, false)
      }
 }
 

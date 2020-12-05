@@ -6,7 +6,12 @@ function onSuccess (res, rej) {
     }  
 }
 function onFail (rej) {
-    rej(JSON.parse(this.responseText));
+    console.log('responsetext', this.responseText);
+    if (this.responseText) {
+        rej(JSON.parse(this.responseText));
+    } else {
+        rej(new Error('something broke'));
+    }
 }
 
 //AJAX FETCH
@@ -14,7 +19,7 @@ export function fetchContent(method, url, token, contentType, formData, external
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
-        xhr.timeout = 3000; // time in milliseconds
+        xhr.timeout = 160000; // time in milliseconds
         xhr.addEventListener('load', onSuccess.bind(xhr, res, rej));
         xhr.addEventListener('error', onFail.bind(xhr, rej));
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));
