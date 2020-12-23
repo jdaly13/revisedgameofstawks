@@ -98,10 +98,11 @@ class DashboardPage extends React.Component {
   
   async componentDidMount() {
     if (this.props.location.state) {
-      console.log('dfdd', this.props.location.state);
+      console.log('login', this.props.location.state);
       this.setState({
         data: this.props.location.state,
-        currentPortfolio: this.props.location.state.portfolio
+        currentPortfolio: this.props.location.state.portfolio,
+        secretData: this.props.location.state.email
       }, this.getCurrentPrices);
 
     } else {

@@ -7,7 +7,6 @@ class UserProfile extends React.Component {
     this.data = props.data;
     this.secretData = props.secretData;
     this.portfolio = props.portfolio;
-    console.log('data', props.data);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,42 +56,51 @@ class UserProfile extends React.Component {
     );
   }
 
-  getTokensProduced() {
-    return this.data && this.data.tokensProduced;
+  tokenInformation() {
+    return (
+      <div>
+        <h3>Token information</h3>
+        <h4> Tokens that have been produced {this.data.tokensProduced}</h4>
+        {this.data.tokensGivenAndReceived.length && <h4> {this.getTokensReceived()}</h4>}
+      </div>
+    )
   }
 
   getTokensReceived() {
     const tokenReceivedString = "Total amount of tokens received "
-    if (this.data && this.data.tokensGivenAndReceived.length) {
-      let total= 0;
-      this.data.tokensGivenAndReceived.forEach((obj) => {
-        console.log(obj)
-        total += obj.amount;
-      });
-      return tokenReceivedString + total;
-    }
-    return '';
+    let total= 0;
+    this.data.tokensGivenAndReceived.forEach((obj) => {
+      console.log(obj)
+      total += obj.amount;
+    });
+    return tokenReceivedString + total;
   }
 
   getPortfolio() {
-    return this.portfolio.map((obj, index) => (
-      <div className="portfolio" key={obj._id} id={obj.symbol}>
-        <span>
-          You have {obj.noOfShares} shares of {obj.name === "Not Available Currently" ? obj.symbol : obj.name}
-        </span>
-        <span>
-          The average price paid per share is {obj.pershareavg} and your total
-          invested amount is {obj.investedamount + ' '}{' '}
-        </span>
-        <span>
-          The Current Price of {obj.name === "Not Available Currently" ? obj.symbol : obj.name} is {obj.currentPrice}
-        </span>
-        <span> The current value of your stock is {obj.currentValue} </span>
-        <span> Your current gain or loss is {obj.gainOrLoss} </span>
-        <span> Tokens that have been produced {this.getTokensProduced()}</span>
-        <span> {this.getTokensReceived()}</span>
-      </div>
-    ));
+    const outputPortfolio = () => {
+      return this.portfolio.map((obj, index) => (
+        <div className="portfolio" key={obj._id} id={obj.symbol}>
+          <span>
+            You have {obj.noOfShares} shares of {obj.name === "Not Available Currently" ? obj.symbol : obj.name}
+          </span>
+          <span>
+            The average price paid per share is {obj.pershareavg} and your total
+            invested amount is {obj.investedamount + ' '}{' '}
+          </span>
+          <span>
+            The Current Price of {obj.name === "Not Available Currently" ? obj.symbol : obj.name} is {obj.currentPrice}
+          </span>
+          <span> The current value of your stock is {obj.currentValue} </span>
+          <span> Your current gain or loss is {obj.gainOrLoss} </span>
+        </div>
+      ));
+    }
+    return (
+      <React.Fragment>
+      <h3>Your stock portfolio</h3>
+      {outputPortfolio()}
+      </React.Fragment>
+    );
   }
 
   render() {
@@ -104,6 +112,7 @@ class UserProfile extends React.Component {
         {!!this.portfolio.length && (
           <div>
             {this.getTitle()}
+            {this.data && !!this.data.tokensProduced && this.tokenInformation()}
             {this.getPortfolio()}
           </div>
         )}

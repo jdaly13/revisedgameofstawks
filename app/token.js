@@ -14,6 +14,12 @@ if (process.env.NETWORK === 'ganache') {
     web3address = host + port;
 }
 
+if (process.env.NETWORK === 'goerli') {
+    host = process.env.HOST;
+    port = process.env.GOERLIPORT;
+    web3address = host + port;
+}
+
 if (process.env.NETWORK === "ropsten") {
     web3address = new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/5a327d7e11d1415e99866d9a3f203ae2`)
 }
