@@ -46,6 +46,7 @@ class LoginPage extends React.Component {
       const response = await dataSource.authorizeUser(formData);
       if (response.success) {
         Auth.authenticateUser(response.token);
+        /* TO DO Render out Dashboard page here and instead of using router */
         this.props.history.push("/profile"+this.props.history.location.search, response.data.local)
      } else {
        throw response;
@@ -61,21 +62,6 @@ class LoginPage extends React.Component {
     }
 
   }
-
-  /**
-   * Change the user object.
-   *
-   * @param {object} event - the JavaScript event object
-   */
-  // changeUser(event) {
-  //   const field = event.target.name;
-  //   const user = this.state.user;
-  //   user[field] = event.target.value;
-
-  //   this.setState({
-  //     user
-  //   });
-  // }
 
   render() {
     return (

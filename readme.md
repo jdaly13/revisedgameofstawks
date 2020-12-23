@@ -111,10 +111,33 @@ deploy to goerli using geth
 alert user if tokenSendSuccess is true to see if user received gost tokens when they sold stonks - alert on each sale/withdraw
 ask question on ethere stack exchannge in order to use infura I need to provide nmenmonic to 
 
-`npx truffle console --network ropsten`  
+
+ ## deploying to test network using Truffle
+ `npx truffle console --network ropsten`  
 then  
 `await web3.eth.getAccounts()`
- `await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')`
+`await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')`  
+make sure you have enough funds to deploy and give out ether  
+ `truffle migrate --network ropsten`  
+ configured using infura - tutorials  
+ https://forum.openzeppelin.com/t/connecting-to-public-test-networks-with-truffle/2960  
+ https://medium.com/@andresaaap/how-to-deploy-a-smart-contract-on-a-public-test-network-rinkeby-using-infura-truffle-8e19253870c4  
+ current balances https://ropsten.etherscan.io/address/0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7
+
+ create your own mnemonic  
+
+  ## Using Geth to connect to Goerli network
+ in one terminal start clef  
+ `clef --keystore /Users/jdaly/Library/Ethereum/goerli/keystore --chainid 5`  
+ in second terminal start geth   
+ `geth --goerli --syncmode "light" --rpc --rpcapi db,eth,net,web3,personal --signer=/Users/jdaly/Library/Signer/clef.ipc`  
+ in third terminal attach js terminal to get access to web3  
+ `geth attach /Users/jdaly/Library/Ethereum/goerli/geth.ipc`  
+ once you have access to terminal use methods on your account  
+ `web3.fromWei(eth.getBalance("0x32A0888965c6ee1354DF982A41ed4eC73e280Db2"),"ether")`   
+
+
+
 
 
 
