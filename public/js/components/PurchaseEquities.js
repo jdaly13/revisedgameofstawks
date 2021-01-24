@@ -96,11 +96,17 @@ class PurchaseEquities extends React.Component {
     });
   }
 
+  networksDontMatch() {
+    if (!this.props.currentNetwork) return true;
+    return this.props.currentNetwork !== this.props.contractNetwork;
+  }
+
   render() {
     return (
       <section className="buysell">
         <button className="enableEthereumButton" onClick={this.props.connectEthereum}>ENABLE ETHEREUM TO RECEIVE TOKENS WHEN YOU SELL</button>
-        {this.props.address && <h4 style={{color:"blue"}}>You are connnected with address {this.props.address} </h4>}
+        {this.props.address && <h4 style={{color:"blue"}}>You are connnected with address {this.props.address} and to the {this.props.currentNetwork} network </h4>}
+        {this.networksDontMatch() && <h4 style={{color:"blue"}}> Make sure you are connected to {this.props.contractNetwork} network </h4>}
         <h4>Time to Buy {this.portfolioExists && 'or sell'} some stawks</h4>
         <div className="container buy">
           <h6>Purchase</h6>
@@ -166,6 +172,7 @@ class PurchaseEquities extends React.Component {
               onClick={this.checkValues}
               type="submit"
               id="withdraw"
+              disabled={this.networksDontMatch()}
             >
               Submit
             </button>

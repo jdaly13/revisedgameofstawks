@@ -8,7 +8,7 @@ import LoginPage from './containers/LoginPage';
 
 const AppRouting = ()  => {
   return (
-      <Router >
+      <Router>
       <Switch>
           <Route path="/profile" exact render={(props) => {
               return <DashboardPage {...props} />
@@ -36,5 +36,4 @@ const AppRouting = ()  => {
   )
 }
 
-//export default AppRouting;
 export default AppRouting;

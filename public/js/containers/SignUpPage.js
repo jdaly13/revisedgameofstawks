@@ -1,72 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {withRouter} from 'react-router-dom';
 import SignUpForm from '../components/SignUpForm.js';
 import dataSource from '../services/dataSource';
 import Auth from '../modules/Auth';
-import {changeUser} from '../services/utils'
+import {useChangeUser} from '../services/utils'
 
 
-class SignUpPage extends React.Component {
+function SignUpPage(props) {
 
-  constructor(props) {
-    super(props);
+  const [errors, setErrors] = useState({});
+  const [user, setUserState] = useChangeUser({email: '', name: '',  password: ''});
 
-    // set the initial component state
-    this.state = {
-      errors: {},
-      user: {
-        email: '',
-        name: '',
-        password: ''
-      },
-      signUpSuccess: false
-    };
-
-    this.processForm = this.processForm.bind(this);
-    this.changeUser = changeUser.bind(this);
-  }
-
-  /**
-   * Process the form.
-   *
-   * @param {object} event - the JavaScript event object
-   */
-  async processForm(event) {
+  async function processForm(event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
 
     // create a string for an HTTP body message
-    const name = encodeURIComponent(this.state.user.name);
-    const email = encodeURIComponent(this.state.user.email);
-    const password = encodeURIComponent(this.state.user.password);
+    const name = encodeURIComponent(user.name);
+    const email = encodeURIComponent(user.email);
+    const password = encodeURIComponent(user.password);
+
     const formData = `name=${name}&email=${email}&password=${password}`;
 
     try {
       const response = await dataSource.createUser(formData);
-      Auth.authenticateUser(response.token);
-      this.props.history.push("/profile"+this.props.history.location.search)
-    } catch (e) {
-      console.log(e);
-      const errors = e.errors ? e.errors : {};
+      if (response.success) {
+        Auth.authenticateUser(response.token);
+        props.history.push("/profile"+props.history.location.search);
+      } else {
+        console.warn(response);
+        const errors = (typeof err === "object") ? err : {};
+        errors.summary = response.message || "Something bad happened";
+        setErrors(errors);
+      }
+    } catch (err) {
+      console.warn(err);
+      const errors = (typeof err === "object") ? err : {};
+      errors.summary = "Something bad happened"
+      setErrors(errors);
     }
 
   }
-
-
-  /**
-   * Render the component.
-   */
-  render() {
-    return (
-        <SignUpForm
-          onSubmit={this.processForm}
-          onChange={this.changeUser}
-          errors={this.state.errors}
-          user={this.state.user}
-          /> 
-    );
-  }
-
+  return (
+    <SignUpForm
+    onSubmit={processForm}
+    onChange={setUserState}
+    errors={errors}
+    user={user}
+    /> 
+  )
 }
 
 export default withRouter(SignUpPage);

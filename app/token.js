@@ -1,4 +1,3 @@
-require('dotenv').config({path: __dirname + '../.env'});
 let Web3 = require('web3');
 var HDWalletProvider = require('@truffle/hdwallet-provider');
 
@@ -7,6 +6,8 @@ var token = require('../compiled-token.json');
 let host;
 let port;
 let web3address;
+let contractAddress = token.networks.address;
+let account = 0;
 
 if (process.env.NETWORK === 'ganache') {
     host = process.env.HOST;
@@ -14,10 +15,12 @@ if (process.env.NETWORK === 'ganache') {
     web3address = host + port;
 }
 
-if (process.env.NETWORK === 'goerli') {
+if (process.env.NETWORK === 'goerli') { 
     host = process.env.HOST;
     port = process.env.GOERLIPORT;
     web3address = host + port;
+    contractAddress = process.env.GOERLICONTRACT;
+    account = 2;
 }
 
 if (process.env.NETWORK === "ropsten") {
@@ -27,11 +30,10 @@ if (process.env.NETWORK === "ropsten") {
 module.exports = async function sendToken(amount, address) {
     if (!address) return Promise.reject(new Error('no address'));
     var web3 = new Web3(web3address);
-    var contract = new web3.eth.Contract(token.abi, token.networks.address);
-
+    var contract = new web3.eth.Contract(token.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     return contract.methods.transfer(address, Math.floor(amount * 100)).send({
-        from: accounts[0]
+        from: accounts[account]
     }).then((res) => {
         return amount;
     });

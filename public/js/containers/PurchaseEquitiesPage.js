@@ -64,7 +64,9 @@ class PurchaseEquitiesPage extends React.Component {
         currentPurchase={this.state.currentPurchase}
         portfolio={this.props.portfolio}
         connectEthereum={this.props.connectEthereum}
-        address={this.props.address} 
+        address={this.props.address}
+        contractNetwork={this.props.contractNetwork}
+        currentNetwork={this.props.currentNetwork} 
       />
     );
   }

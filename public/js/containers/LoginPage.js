@@ -1,45 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {withRouter} from 'react-router-dom';
 import Auth from '../modules/Auth';
 import SignIn from '../components/SignIn';
 import dataSource from '../services/dataSource';
-//import LoginForm from '../components/LoginForm';
-import {changeUser} from '../services/utils'
+import {useChangeUser} from '../services/utils'
 
 
-class LoginPage extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    const storedMessage = localStorage.getItem('successMessage');
-    let successMessage = '';
-
-    if (storedMessage) {
-      successMessage = storedMessage;
-      localStorage.removeItem('successMessage');
-    }
-
-    this.state = {
-      errors: {},
-      successMessage,
-      user: {
-        email: '',
-        password: ''
-      },
-      dbData: null
-    };
-    this.processForm = this.processForm.bind(this);
-    this.changeUser = changeUser.bind(this);
-  }
-
-
-  async processForm(event) {
+function LoginPage(props) {
+  const [errors, setErrors] = useState({});
+  const [user, setUserState] = useChangeUser({email: '',  password: ''});
+  async function processForm (event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
 
     // create a string for an HTTP body message
-    const email = encodeURIComponent(this.state.user.email);
-    const password = encodeURIComponent(this.state.user.password);
+    const email = encodeURIComponent(user.email);
+    const password = encodeURIComponent(user.password);
     const formData = `email=${email}&password=${password}`;
 
     try {
@@ -47,34 +23,30 @@ class LoginPage extends React.Component {
       if (response.success) {
         Auth.authenticateUser(response.token);
         /* TO DO Render out Dashboard page here and instead of using router */
-        this.props.history.push("/profile"+this.props.history.location.search, response.data.local)
+        props.history.push("/profile"+props.history.location.search, response.data.local)
      } else {
-       throw response;
+      console.warn(response);
+      const errors = (typeof err === "object") ? err : {};
+      errors.summary = response.message || "Something bad happened";
+      setErrors(errors);
      }
     } catch(err) {
       console.warn(err);
       const errors = (typeof err === "object") ? err : {};
       errors.summary = "Something bad happened"
-      this.setState({
-        errors
-      });
+      setErrors(errors);
 
     }
 
   }
-
-  render() {
-    return (
-        <SignIn
-        onSubmit={this.processForm}
-        onChange={this.changeUser}
-        errors={this.state.errors}
-        successMessage={this.state.successMessage}
-        user={this.state.user}
-      />
-    );
-  }
-
+  return (
+    <SignIn
+    onSubmit={processForm}
+    onChange={setUserState}
+    errors={errors}
+    user={user}
+  />
+  )
 }
 
 export default withRouter(LoginPage);

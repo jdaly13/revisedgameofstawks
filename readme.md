@@ -39,6 +39,9 @@ git push heroku master
 ```
 more info here https://devcenter.heroku.com/articles/git#creating-a-heroku-remote  
 
+## Troubleshooting deploy  
+`heroku logs --tail` 
+
 ### DEPLOYING A NODE JS APP TO HEROKU  
 https://devcenter.heroku.com/articles/deploying-nodejs  
 heroku uses the procfile - if no procfile will use start script in package.json
@@ -116,7 +119,8 @@ ask question on ethere stack exchannge in order to use infura I need to provide 
  `npx truffle console --network ropsten`  
 then  
 `await web3.eth.getAccounts()`
-`await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')`  
+`await web3.eth.getBalance('0xa1bf66d393F5CbecC66368ED28BB11715b94F1F7')` 
+`await web3.eth.getBalance('0x6da2a81e129bf3b8b80254abde5a6f967e5e22ca')` 
 make sure you have enough funds to deploy and give out ether  
  `truffle migrate --network ropsten`  
  configured using infura - tutorials  
@@ -127,14 +131,26 @@ make sure you have enough funds to deploy and give out ether
  create your own mnemonic  
 
   ## Using Geth to connect to Goerli network
- in one terminal start clef  
- `clef --keystore /Users/jdaly/Library/Ethereum/goerli/keystore --chainid 5`  
+ in one terminal start clef point to either clef accounts or another one  
+ `clef --keystore /Users/jdaly/Library/Ethereum/keystore --chainid 5`  
+ `clef --keystore /Users/jdaly/Library/Ethereum/goerli/keystore --chainid 5`    
  in second terminal start geth   
  `geth --goerli --syncmode "light" --rpc --rpcapi db,eth,net,web3,personal --signer=/Users/jdaly/Library/Signer/clef.ipc`  
  in third terminal attach js terminal to get access to web3  
  `geth attach /Users/jdaly/Library/Ethereum/goerli/geth.ipc`  
  once you have access to terminal use methods on your account  
- `web3.fromWei(eth.getBalance("0x32A0888965c6ee1354DF982A41ed4eC73e280Db2"),"ether")`   
+ `web3.fromWei(eth.getBalance("0x32A0888965c6ee1354DF982A41ed4eC73e280Db2"),"ether")` 
+ `web3.eth.getBalance('0x6da2a81e129bf3b8b80254abde5a6f967e5e22ca')`
+ `web3.eth.getBalance('0x32A0888965c6ee1354DF982A41ed4eC73e280Db2')`
+ `web3.eth.getBalance('0xA18Cf86870b4D9DCfC088C30c4812dee4e687f7E')` 
+ Now Run deploy script  
+ `node node deploygoerli.js`
+
+ ### STUFF TO DO FOR GOERLI or any self hosted solution  
+ https://github.com/alvinlaw/go-ethereum/blob/v1.9.14/cmd/clef/tutorial.md#automatic-rules
+
+ CREATE PASSWORD RECOVERY system
+ https://devcenter.heroku.com/articles/sendgrid
 
 
 

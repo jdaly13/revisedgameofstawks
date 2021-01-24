@@ -18,12 +18,19 @@ class DashboardPage extends React.Component {
       currentPrice: null,
       auth:true,
       token: Auth.getToken(),
-      etherAddress: null
+      etherAddress: null,
+      ethereumNetwork: null,
     };
     this.symbols = {};
     this.getCurrentPrices = this.getCurrentPrices.bind(this);
     this.update = this.update.bind(this);
     this.connectEthereum = this.connectEthereum.bind(this);
+    this.ethereumNetworks = {
+      '0x3': 'ropsten',
+      '0x5': 'goerlie',
+      '0x4': 'rinkeby',
+      '0x1': 'main'
+    }
 
   }
 
@@ -79,10 +86,15 @@ class DashboardPage extends React.Component {
 
   async connectEthereum() {
     if (window.ethereum) {
+      const currentNetwork = this.ethereumNetworks[window.ethereum.chainId];
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       console.log('accoutns', accounts);
+      const ethereumNetwork = await dataSource.checkGOSTtoken(this.state.token);
+      console.log('network', ethereumNetwork);
       this.setState({
-        etherAddress: accounts[0] || null
+        etherAddress: accounts[0] || null,
+        contractNetwork: ethereumNetwork.network,
+        currentNetwork: currentNetwork
       })
     } else {
       window.alert('Please install metamask extension so you can earn tokens');
@@ -150,11 +162,13 @@ class DashboardPage extends React.Component {
             token={this.state.token}
             update={this.update}
             connectEthereum={this.connectEthereum}
+            currentNetwork={this.state.currentNetwork}
+            contractNetwork={this.state.contractNetwork}
           />
         </div>
       );
     } else {
-      return <div>Loading ... </div>;
+      return !this.state.errors ? <div>Loading ... </div> : <div> Something bad happened return to homepage</div>;
     }
   }
 }

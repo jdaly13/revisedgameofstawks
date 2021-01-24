@@ -1,9 +1,11 @@
 function onSuccess (res, rej) {
     if (this.status === 200) {
         res(JSON.parse(this.responseText));
+    } else if (this.status === 401) {
+        rej("Unauthorized");
     } else {
         rej(JSON.parse(this.responseText));
-    }  
+    }
 }
 function onFail (rej) {
     console.log('responsetext', this.responseText);

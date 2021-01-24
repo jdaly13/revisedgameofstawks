@@ -21,6 +21,7 @@ const SignUpForm = ({
           helperText={<HelperText>First and Last</HelperText>}
         ><Input
            name="name"
+           id="name"
            value={user.name}
            onChange={onChange} />
         </TextField>
@@ -32,6 +33,7 @@ const SignUpForm = ({
           helperText={<HelperText></HelperText>}
         ><Input
            name="email"
+           id="email"
            value={user.email}
            onChange={onChange} />
         </TextField>
@@ -44,6 +46,7 @@ const SignUpForm = ({
         ><Input
            value={user.password}
            name="password"
+           id="password"
            onChange={onChange}
            type="password" />
         </TextField>

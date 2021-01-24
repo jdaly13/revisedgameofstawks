@@ -5,11 +5,18 @@ module.exports = function(express) {
   const router = new express.Router();
   router.get('/dashboard', (_req, res) => {
     const data = res.data;
+    console.log('response.data.dashboard', data.availableBalance, data.sells);
     res.status(200).json({
       message: res.data.email,
       data
     });
   });
+
+  router.get('/getTokenInfo', (req, res) => {
+    res.status(200).json({
+        network: process.env.NETWORK
+    });
+  })
 
   router.post('/purchaseequities', (req, res, done) => {
         var price = +parseFloat(req.body.price).toFixed(2),
@@ -194,7 +201,7 @@ module.exports = function(express) {
                 const response = await sendToken(profitOrLoss, etherAddress);
                 tokenSendSuccess = true;
             } catch(err) { //no ether address or transaction did not complete
-                console.log(err);
+                console.log('tokenerror', err);
             }
             const arrayToPush = tokenSendSuccess ? copied.tokensGivenAndReceived : copied.tokensGivenAndRejected;
             arrayToPush.push({

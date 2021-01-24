@@ -61,7 +61,7 @@ class UserProfile extends React.Component {
       <div>
         <h3>Token information</h3>
         <h4> Tokens that have been produced {this.data.tokensProduced}</h4>
-        {this.data.tokensGivenAndReceived.length && <h4> {this.getTokensReceived()}</h4>}
+        <h4> Tokens Received {this.data.tokensGivenAndReceived.length && this.getTokensReceived()} </h4>
       </div>
     )
   }
