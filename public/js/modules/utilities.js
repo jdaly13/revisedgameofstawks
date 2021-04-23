@@ -3,8 +3,10 @@ function onSuccess (res, rej) {
         res(JSON.parse(this.responseText));
     } else if (this.status === 401) {
         rej("Unauthorized");
+    } else if (this.status === 503) {
+        rej("timeout occurred");
     } else {
-        rej(JSON.parse(this.responseText));
+        rej("something bad happended");
     }
 }
 function onFail (rej) {
@@ -21,7 +23,7 @@ export function fetchContent(method, url, token, contentType, formData, external
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
-        xhr.timeout = 160000; // time in milliseconds
+        xhr.timeout = 29000; // time in milliseconds 30 seconds allowed by heroku
         xhr.addEventListener('load', onSuccess.bind(xhr, res, rej));
         xhr.addEventListener('error', onFail.bind(xhr, rej));
         xhr.addEventListener('timeout', onFail.bind(xhr, rej));

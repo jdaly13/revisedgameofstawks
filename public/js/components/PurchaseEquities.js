@@ -190,6 +190,7 @@ class PurchaseEquities extends React.Component {
           </>
           )}
           {this.state.loading && <div>LOADING ... Please wait</div>}
+          {this.props.waitingForToken && <div>Sale complete waiting for token transaction</div>}
           {typeof this.state.purchaseOrSaleSuccess === "boolean" && (
             <div>
               <h4>

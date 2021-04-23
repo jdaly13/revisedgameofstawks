@@ -21,6 +21,9 @@ const dataSource = {
      },
      checkGOSTtoken(jwtToken, body) {
         return fetchContent('GET', 'api/getTokenInfo', jwtToken, 'application/json', body, false)
+     },
+     checkTokenTransaction(jwtToken) {
+        return fetchContent('GET', 'api/tokenTransaction', jwtToken, 'application/json', null)
      }
 }
 

@@ -153,6 +153,15 @@ make sure you have enough funds to deploy and give out ether
  https://devcenter.heroku.com/articles/sendgrid
 
 
+ figure out way to make user pay for fees
+ https://ethereum.stackexchange.com/questions/38479/how-to-make-someone-else-pay-for-gas
+ https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
+
+ create bug where we do User.find twice unnedcessarily because the middleware already finds user just also pass in user so we can do a save
+
+ make user login after initially creating account
+
+
 
 
 

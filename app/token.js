@@ -27,6 +27,8 @@ if (process.env.NETWORK === "ropsten") {
     web3address = new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/5a327d7e11d1415e99866d9a3f203ae2`)
 }
 
+// TODO implement https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html#methods-mymethod-send
+// TO DO same as above https://ethereumdev.io/waiting-for-a-transaction-to-be-mined-on-ethereum-with-js/
 module.exports = async function sendToken(amount, address) {
     if (!address) return Promise.reject(new Error('no address'));
     var web3 = new Web3(web3address);

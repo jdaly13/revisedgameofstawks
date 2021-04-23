@@ -10,7 +10,9 @@ class PurchaseEquitiesPage extends React.Component {
     this.getStockPrice = this.getStockPrice.bind(this);
     this.makePurchase = this.makePurchase.bind(this);
     this.makeSale = this.makeSale.bind(this);
-    this.state = {};
+    this.state = {
+      waitingForToken: false
+    };
   }
 
 
@@ -48,9 +50,22 @@ class PurchaseEquitiesPage extends React.Component {
       time: resolution.time,
       address: this.props.address
     };
+    function checkTokenResponse(response) {
+      if (response.success) {
+        console.log('success')
+        this.setState({
+          waitingForToken: false,
+        },this.props.update(response.data));
+      } else { //sucess false;
+        console.log('success false', response);
+        return dataSource.checkTokenTransaction(this.props.token).then(checkTokenResponse.bind(this))
+      }
+    }
     return dataSource.makeSale(this.props.token, JSON.stringify(objToSend)).then((res)=>{
-      console.log('response', res);
-      this.props.update(res.data)
+      this.setState({
+        waitingForToken: true,
+      });
+      return dataSource.checkTokenTransaction(this.props.token).then(checkTokenResponse.bind(this));
     });
   }
 
@@ -66,7 +81,8 @@ class PurchaseEquitiesPage extends React.Component {
         connectEthereum={this.props.connectEthereum}
         address={this.props.address}
         contractNetwork={this.props.contractNetwork}
-        currentNetwork={this.props.currentNetwork} 
+        currentNetwork={this.props.currentNetwork}
+        waitingForToken={this.state.waitingForToken}
       />
     );
   }
