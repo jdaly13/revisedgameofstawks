@@ -20,7 +20,6 @@ module.exports = (req, res, next) => {
     if (err) { return res.status(401).end(); }
 
     const userId = decoded.sub;
-    console.log('userId', userId);
 
     // check if a user exists
     return User.findById(userId, (userErr, user) => {
@@ -29,6 +28,7 @@ module.exports = (req, res, next) => {
       }
       console.log('findbyId', user.local.sells);
 			res.data = user.local;
+      res.user = user;
       return next();
     });
   });

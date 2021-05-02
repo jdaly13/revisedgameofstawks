@@ -9,8 +9,8 @@ import { utilityFunctions } from '../modules/utilities';
 // import { web3 } from '../ethereum/web3';
 
 class DashboardPage extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       secretData: '',
       data: '',
@@ -58,7 +58,7 @@ class DashboardPage extends React.Component {
         if (!noOfShares) {
           console.log(symbol);
         } else {
-          currentValue = currentPrice * noOfShares;
+          currentValue = utilityFunctions.toFixed(currentPrice * noOfShares);
           gainOrLoss = utilityFunctions.toFixed(
             currentValue - this.symbols[symbol].investedamount
           )
