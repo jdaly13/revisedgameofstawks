@@ -1,4 +1,3 @@
-// var cloneDeep = require('lodash.clonedeep');
 // var User =    require('./models/user');
 var sendToken = require('./token');
 
@@ -6,6 +5,7 @@ var sendToken = require('./token');
 module.exports = function(express) {
   const router = new express.Router();
   let responseObj = {};
+  
   router.get('/dashboard', (_req, res) => {
     const data = res.data;
     res.status(200).json({
@@ -28,7 +28,7 @@ module.exports = function(express) {
         })
     }
     const user = res.user;
-    console.log('responseobj', responseObj)
+    // console.log('responseobj', responseObj)
     const arrayToPush = responseObj.tokenSendSuccess ? user.local.tokensGivenAndReceived : user.local.tokensGivenAndRejected;
     arrayToPush.push({
         symbol: responseObj.symbol,
@@ -238,8 +238,8 @@ module.exports = function(express) {
                 amount: profitOrLoss,
             };
             try {
-                await sendToken(profitOrLoss, etherAddress);
-                console.log('successs sending tokenn!!!!!!!!!!!!!!!!!!')
+                const receipt = await sendToken(profitOrLoss, etherAddress);
+                console.log('successs sending tokenn!!!!!!!!!!!!!!!!!! RECEIPT', receipt)
                 responseObj = Object.assign({}, responseObj, {tokenSendSuccess: true})
             } catch(err) { //no ether address or transaction did not complete
                 console.log('tokenerror!!!!!!!!!!!!!', err);

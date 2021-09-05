@@ -27,16 +27,21 @@ if (process.env.NETWORK === "ropsten") {
     web3address = new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/5a327d7e11d1415e99866d9a3f203ae2`)
 }
 
-// TODO implement https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html#methods-mymethod-send
 // TO DO same as above https://ethereumdev.io/waiting-for-a-transaction-to-be-mined-on-ethereum-with-js/
+// REF - https://web3js.readthedocs.io/en/v1.2.0/web3-eth-contract.html#methods-mymethod-estimategas
 module.exports = async function sendToken(amount, address) {
     if (!address) return Promise.reject(new Error('no address'));
     var web3 = new Web3(web3address);
     var contract = new web3.eth.Contract(token.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
+    const gasEstimate = await contract.methods.transfer(address, Math.floor(amount * 100)).estimateGas(address, amount, {from: accounts[account]});
+    const gasPrice = await web3.eth.getGasPrice();
+    const totalGas = gasPrice * gasEstimate;
+    console.log('totlaGas - ', totalGas);
     return contract.methods.transfer(address, Math.floor(amount * 100)).send({
         from: accounts[account]
     }).then((res) => {
+        console.log('gas price -', gasPrice, 'gasEstimate', gasEstimate, totalGas);
         return amount;
     });
 }

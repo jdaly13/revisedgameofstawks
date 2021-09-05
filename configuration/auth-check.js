@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
       if (userErr || !user) {
         return res.status(401).end();
       }
-      console.log('findbyId', user.local.sells);
+      // console.log('findbyId middleware auth checker');
 			res.data = user.local;
       res.user = user;
       return next();
