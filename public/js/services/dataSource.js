@@ -19,6 +19,9 @@ const dataSource = {
      makeSale(jwtToken, body) {
         return fetchContent('POST', 'api/sellequities', jwtToken, 'application/json', body, false )
      },
+     getGasEstimate(jwtToken, body) {
+      return fetchContent('GET', 'api/sellequities', jwtToken, 'application/json', body, false )
+     },
      checkGOSTtoken(jwtToken, body) {
         return fetchContent('GET', 'api/getTokenInfo', jwtToken, 'application/json', body, false)
      },
