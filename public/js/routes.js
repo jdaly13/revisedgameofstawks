@@ -11,6 +11,9 @@ const AppRouting = ()  => {
       <Router>
       <Switch>
           <Route path="/profile" exact render={(props) => {
+              if (!Auth.isUserAuthenticated()) {
+                return <Redirect to="/" />
+              }
               return <DashboardPage {...props} />
           }} />
           <Route path="/signup" exact render={(props) => {

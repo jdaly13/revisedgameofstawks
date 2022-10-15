@@ -41,6 +41,19 @@ class PurchaseEquitiesPage extends React.Component {
       });
   }
 
+
+  estimateGas(data, amount) {
+    const resolution = data[0]
+    const objToSend = {
+      symbol: resolution.symbol.toLowerCase(), 
+      price: resolution.price, 
+      noOfShares:amount, 
+      time: resolution.time,
+      address: this.props.address
+    };
+    return dataSource.estimateGas(this.props.token, JSON.stringify(objToSend))
+  }
+
   makeSale(data, amount) {
     const resolution = data[0]
     const objToSend = {
