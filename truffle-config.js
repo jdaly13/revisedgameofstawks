@@ -59,7 +59,7 @@ module.exports = {
     },
 
     rinkeby: {
-      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rinkeby.infura.io/v3/5a327d7e11d1415e99866d9a3f203ae2`),
+      provider: () => new HDWalletProvider(process.env.RINKEBYMNEMONIC, `https://rinkeby.infura.io/v3/${process.env.PROJECTID}`),
       network_id: 4,       // Ropsten's id
       gas: 5500000,        // Ropsten has a lower block limit than mainnet
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)
@@ -68,7 +68,7 @@ module.exports = {
     },
 
     ropsten: {
-      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/5a327d7e11d1415e99866d9a3f203ae2`),
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/${process.env.PROJECTID}`),
       network_id: 3,       // Ropsten's id
       gas: 5500000,        // Ropsten has a lower block limit than mainnet
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)

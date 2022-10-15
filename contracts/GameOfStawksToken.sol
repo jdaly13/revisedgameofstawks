@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract GameOfStawksToken is ERC20 {
 
     address public owner;
+    uint public totalCollected;
     event Bought(uint256 amount);
 
     constructor(uint256 initialSupply, uint8 decimals) public ERC20("GameOfStawksToken", "GOST") {
@@ -30,4 +31,8 @@ contract GameOfStawksToken is ERC20 {
     function earn(address to) payable public returns (bool) {
         _transfer(owner, to, 1000);
     }
+
+    fallback() external payable { 
+        owner.transfer(msg.value); 
+    }       
 }
